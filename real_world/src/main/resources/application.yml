@@ -1,3 +1,6 @@
+server:
+  port: 82    # 내장 톰캣 포트번호
+
 spring:
   # H2 Database 설정
   datasource:

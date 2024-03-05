@@ -10,6 +10,12 @@
 `종합 선물 세트(@Getter, @Setter, @ToString, @EqualsAndHashCode, @RequiredArgsConstructor)`
 - `POJO(Plain Old Java Objects)` & `bean` 과 관련된 모든 `재사용 가능 코드(boilerplate)`를 생성
 - ex) `getter` `setter` `toString` `equals`  
+<br/>
+
+### @RequiredArgsConstructor
+`생성자 주입`을 임의의 코드 없이 자동으로 설정해주는 어노테이션
+- 초기화 되지 않은 `final 필드`나 `@NonNull`이 붙은 필드에 대해 생성자를 생성해 줌
+- 새로운 필드 추가 시, 다시 생성자를 만들어서 관리하는 번거로움을 없애 줌
 <br/><br/>
 
 ## annotation
@@ -33,7 +39,13 @@
 - 속성 값으로 `strategy`가 있는데 이를 통해 `자동 생성 전략`을 지정할 수 있음
   - `IDENTITY`: 기본 키 생성을 `데이터베이스에 위임`하는 전략
   - `SEQUENCE`: `데이터베이스 시퀀스`를 사용해 기본 키를 생성
-  - `TABLE`: 시퀀스 대신 `테이블`을 사용할 뿐 `SEQUENCE`전략과 동작 방식이 같음
+  - `TABLE`: 시퀀스 대신 `테이블`을 사용할 뿐 `SEQUENCE`전략과 동작 방식이 같음  
+<br/>
+
+### @Service
+서비스 레이어 지정 어노테이션
+- 비즈니스 로직을 수행하는 서비스 레이어 클래스임을 나타냄
+- 캡슐화 없이 모델 내에서 단독 인터페이스로서 제공되는 동작을 의미
 <br/><br/>
 
 ## JPA

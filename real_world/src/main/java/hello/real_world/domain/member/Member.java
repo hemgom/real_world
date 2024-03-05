@@ -6,9 +6,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
+import lombok.Setter;
 
 // 사용자 정보
-@Getter
+@Getter @Setter
 @Entity
 public class Member {
 
