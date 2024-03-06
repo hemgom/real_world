@@ -1,12 +1,7 @@
 package hello.real_world.config;
 
-import hello.real_world.repository.MemberRepository;
-import hello.real_world.repository.MemberRepositoryImpl;
 import hello.real_world.web.JwtAuthenticationFilter;
 import hello.real_world.web.JwtProvider;
-import hello.real_world.service.MemberService;
-import hello.real_world.service.MemberServiceImpl;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,20 +16,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class Config {
+public class SecurityConfig {
 
-    private final EntityManager em;
     private final JwtProvider jwtProvider;
-
-    @Bean
-    public MemberService memberService() {
-        return new MemberServiceImpl(memberRepository());
-    }
-
-    @Bean
-    public MemberRepository memberRepository() {
-        return new MemberRepositoryImpl(em);
-    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -44,12 +28,12 @@ public class Config {
         httpSecurity
                 .authorizeHttpRequests(
                         authorize -> authorize
-                                .requestMatchers("/members/sign-in").permitAll()    // 해당 API 에 대해선 모든 요청 허가
-                                .requestMatchers("/members/test").hasRole("USER")   // USER 권한이 있어야 요청 가능
-                                .anyRequest().authenticated()                               // 이 밖의 모든 요청에 대해 인증 필요
+                            .requestMatchers("/members/sign-in").permitAll()    // 해당 API 에 대해선 모든 요청 허가
+                            .requestMatchers("/members/test").hasRole("USER")   // USER 권한이 있어야 요청 가능
+                            .anyRequest().authenticated()                               // 이 밖의 모든 요청에 대해 인증 필요
                 );
 
-
+        
         // JWT 인증을 위해 구현 필터를 UsernamePasswordAuthenticationFilter 전에 실행
         httpSecurity
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);

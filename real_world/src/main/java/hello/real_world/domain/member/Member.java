@@ -24,11 +24,15 @@ public class Member {
     @NotEmpty
     private String password;    // 패스워드
 
+    @NotEmpty
+    private String username;    // 사용자 이름
+
     public Member() {
     }
 
-    public Member(String email, String password) {
+    public Member(String email, String password, String username) {
         this.email = email;
         this.password = password;
+        this.username = username;
     }
 }

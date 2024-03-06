@@ -15,7 +15,18 @@
 ### @RequiredArgsConstructor
 `생성자 주입`을 임의의 코드 없이 자동으로 설정해주는 어노테이션
 - 초기화 되지 않은 `final 필드`나 `@NonNull`이 붙은 필드에 대해 생성자를 생성해 줌
-- 새로운 필드 추가 시, 다시 생성자를 만들어서 관리하는 번거로움을 없애 줌
+- 새로운 필드 추가 시, 다시 생성자를 만들어서 관리하는 번거로움을 없애 줌  
+<br/>
+
+### @Builder
+자동으로 `Builder Pattern`에 맞게 `builder 클래스`를 생성해줌
+- `Builder Pattern`: 객체 생성을 위한 방법 중 하나
+  - 객체 생성시 여러 필드가 존재할 경우 나타나는 여러 문제들을 해결하기 위해 등장  
+<br/>
+
+### @Component
+해당 애노테이션을 사용한 클래스가 스프링에서 객체로 만들어 관리하는 대상임을 명시
+- 해당 애노테이션이 존재하는 클래스들을 빈으로 관리
 <br/><br/>
 
 ## annotation
@@ -45,7 +56,12 @@
 ### @Service
 서비스 레이어 지정 어노테이션
 - 비즈니스 로직을 수행하는 서비스 레이어 클래스임을 나타냄
-- 캡슐화 없이 모델 내에서 단독 인터페이스로서 제공되는 동작을 의미
+- 캡슐화 없이 모델 내에서 단독 인터페이스로서 제공되는 동작을 의미  
+<br/>
+
+### @Configuration
+설정 파일을 생성 or Bean 을 등록하기 위한 애노테이션
+- 가시적으로 설정파일 인지 또는 Bean 등록을 할지 알 수 있음  
 <br/><br/>
 
 ## JPA
@@ -57,4 +73,32 @@
 - `update`: 기존 테이블 구조 유지, 신규 추가 컬럼(멤버)만 테이블에 반영
   - 기존 컬럼은 속성이 변경되도 테이블레 반영되지 않음
 - `validate`: DDL 쿼리를 실행하지 않음, 온전하게 엔티티와 테이블이 저장 매핑 되었는지 확인
-  - `none`과 함께 운영 환경에서 권장되는 옵션
+  - `none`과 함께 운영 환경에서 권장되는 옵션  
+<br/><br/>
+
+## Querydsl
+### Spring Boot 버전별 gradle 설정
+1. Spring Boot 3.0 이하
+```
+dependencies {
+
+  implementation 'com.querydsl:querydsl-jpa'
+  annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa"
+  
+  annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+  annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
+}
+```
+2. Spring Boot 3.0 이상
+```
+dependencies {
+
+  implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+  annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
+  
+  annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+  annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
+}
+```
