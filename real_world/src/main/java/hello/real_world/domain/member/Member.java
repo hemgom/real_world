@@ -4,35 +4,26 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotEmpty;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 // 사용자 정보
 @Getter @Setter
 @Entity
+@NoArgsConstructor @AllArgsConstructor  // 이부분 추후에 지울 예정 현재는 계속 Member 필드 변수가 추가 되서 설정해둠
 public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;            // 사용자 식별 ID
+    private Long id;
 
-
-    @NotEmpty
-    private String email;       // email 주소
-
-    @NotEmpty
-    private String password;    // 패스워드
-
-    @NotEmpty
+    private String email;       // 사용자 ID
+    private String password;    // 사용자 PW
     private String username;    // 사용자 이름
 
-    public Member() {
-    }
+    private String bio;         // 사용자 소개
+    private String image;       // 사용자 프로필 사진
 
-    public Member(String email, String password, String username) {
-        this.email = email;
-        this.password = password;
-        this.username = username;
-    }
 }

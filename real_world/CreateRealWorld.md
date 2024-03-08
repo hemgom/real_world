@@ -18,6 +18,16 @@
 - 새로운 필드 추가 시, 다시 생성자를 만들어서 관리하는 번거로움을 없애 줌  
 <br/>
 
+### @NoArgsConstructor
+파라미터가 없는 `기본 생성자`를 생성해줌
+- 클래스에 명시적으로 선언된 생성자가 없어도 인스턴스를 생성할 수 있음  
+<br/>
+
+### @AllArgsConstructor
+모든 필드 값을 파라미터로 받는 생성자를 생성해줌
+- `클래스의 모든 필드`를 한 번에 초기화 할 수 있음  
+<br/>
+
 ### @Builder
 자동으로 `Builder Pattern`에 맞게 `builder 클래스`를 생성해줌
 - `Builder Pattern`: 객체 생성을 위한 방법 중 하나
@@ -26,7 +36,13 @@
 
 ### @Component
 해당 애노테이션을 사용한 클래스가 스프링에서 객체로 만들어 관리하는 대상임을 명시
-- 해당 애노테이션이 존재하는 클래스들을 빈으로 관리
+- 해당 애노테이션이 존재하는 클래스들을 빈으로 관리  
+<br/>
+
+### @ToString
+`toString()`을 자동으로 생성해줌
+- 설정 값으로 `exclude`를 사용하면 설정한 필드를 `toString()` 결과에서 제외시킴
+  - ex) `@ToString(exclude = "필드명")`  
 <br/><br/>
 
 ## annotation
@@ -62,6 +78,12 @@
 ### @Configuration
 설정 파일을 생성 or Bean 을 등록하기 위한 애노테이션
 - 가시적으로 설정파일 인지 또는 Bean 등록을 할지 알 수 있음  
+<br/>
+
+### @RestController
+`Bean`의 타입을 `RestController`로 설정
+- 해당 컨트롤러는 사용자 요청을 받아 `json 값`으로 응답을 주겠다고 명시함
+- `@Controller`와 다르게 리턴 값에 자동으로 `@ResponseBdoy`가 붙어 별도로 명시하지 않아도 됨  
 <br/><br/>
 
 ## JPA
@@ -101,4 +123,20 @@ dependencies {
   annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
 }
-```
+```  
+<br/><br/>
+
+## Spring Framework 6.1 이상 파라미터 인식 오류
+스프링 프레임 워크 6.X - 파라미터 이름 인식 설정
+- 참고 : [Spring Framework 6.2](https://github.com/spring-projects/spring-framework/wiki/Upgrading-to-Spring-Framework-6.x#parameter-name-retention)
+- 원인 : `LocalVariableTableParameterNameDiscoverer` 6.1에서 제거
+- 해결
+  - `gradle`에 아래의 코드 추가 (Groovy DSL)
+  ```
+  trasks.withType(JavaCompile).configureEach {
+      options.compilerArgs.add("-parameters")
+  }
+  ```
+  - `IDE` 수동 구성
+    - `Settings` → `Build, Execution, Deployment` → `Compiler` → `Java Compiler` → `Additional command line parameters`에  `-parameters`를 추가
+  - `주의!`: 이미 실행되어 `out` 패키지가 생성된 프로젝트라면 해당 패키지 삭제하고  `IntelliJ` 재실행 한 후, 프로젝트를 실행하면 위의 설정이 정상 적용 됨

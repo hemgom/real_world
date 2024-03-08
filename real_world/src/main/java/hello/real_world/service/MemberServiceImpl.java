@@ -3,9 +3,8 @@ package hello.real_world.service;
 import hello.real_world.domain.member.Member;
 import hello.real_world.repository.MemberRepository;
 import hello.real_world.repository.MemberSearchCond;
-import hello.real_world.repository.MemberUpdateDto;
+import hello.real_world.dto.MemberUpdateDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,13 +23,13 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void update(Long id, MemberUpdateDto updateParam) {
-        memberRepository.update(id, updateParam);
+    public Optional<Member> findById(Long id) {
+        return memberRepository.findById(id);
     }
 
     @Override
-    public Optional<Member> findById(Long id) {
-        return memberRepository.findById(id);
+    public void update(Long id, MemberUpdateDto updateParam) {
+        memberRepository.update(id, updateParam);
     }
 
     @Override

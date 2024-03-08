@@ -2,6 +2,7 @@ package hello.real_world.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hello.real_world.domain.member.Member;
+import hello.real_world.dto.MemberUpdateDto;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +31,12 @@ public class MemberRepositoryImpl implements MemberRepository {
     }
 
     @Override
+    public Optional<Member> findById(Long id) {
+        Member member = em.find(Member.class, id);
+        return Optional.ofNullable(member);
+    }
+
+    @Override
     public void update(Long id, MemberUpdateDto updateParam) {
         Member findMember = em.find(Member.class, id);
         findMember.setEmail(updateParam.getEmail());
@@ -37,15 +44,9 @@ public class MemberRepositoryImpl implements MemberRepository {
     }
 
     @Override
-    public Optional<Member> findById(Long id) {
-        Member member = em.find(Member.class, id);
-        return Optional.ofNullable(member);
-    }
-
-    @Override
     public List<Member> findAll(MemberSearchCond cond) {
 
-        String email = cond.getEmail();
+        String user = cond.getUsername();
 
         return query
                 .select(member)
