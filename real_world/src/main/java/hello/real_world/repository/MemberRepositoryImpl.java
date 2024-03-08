@@ -2,16 +2,16 @@ package hello.real_world.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hello.real_world.domain.member.Member;
-import hello.real_world.dto.MemberUpdateDto;
+import hello.real_world.dto.FindEntityDto;
+import hello.real_world.dto.UserDto;
 import jakarta.persistence.EntityManager;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-
 import static hello.real_world.domain.member.QMember.member;
 
+@Slf4j
 @Repository
 @Transactional
 public class MemberRepositoryImpl implements MemberRepository {
@@ -31,26 +31,17 @@ public class MemberRepositoryImpl implements MemberRepository {
     }
 
     @Override
-    public Optional<Member> findById(Long id) {
-        Member member = em.find(Member.class, id);
-        return Optional.ofNullable(member);
-    }
+    public Member findMember(UserDto loginInfo) {
 
-    @Override
-    public void update(Long id, MemberUpdateDto updateParam) {
-        Member findMember = em.find(Member.class, id);
-        findMember.setEmail(updateParam.getEmail());
-        findMember.setPassword(updateParam.getPassword());
-    }
-
-    @Override
-    public List<Member> findAll(MemberSearchCond cond) {
-
-        String user = cond.getUsername();
+        String email = loginInfo.getUser().getEmail();
+        String password = loginInfo.getUser().getPassword();
+        log.info("input data : email = {}, password = {}", email, password);
 
         return query
                 .select(member)
                 .from(member)
-                .fetch();
+                .where(FindEntityDto.likeEmail(email), FindEntityDto.likePassword(password))
+                .fetchOne();
     }
+
 }

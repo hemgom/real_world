@@ -22,17 +22,24 @@ commit message : `add user and confirmation related functions.01`
 
 ### 24.03.07
 commit message : `jwt testing result failed`
-- `JWT` 를 통한 사용자 인증 추가 1차 시도
+- `JWT` 를 통한 사용자 인증 추가 1차 시도  
+<br/>
 
 ### 24.03.08
-commit message : ``
-- 사용자 등록, 정보 조회/수정 코드 수정
+commit message : `add basic code for user registration function`
+- 사용자 등록 코드 수정
 	- package `web` -> `controller` rename
 	- `Member.java`: `realWorld specs`에 맞춰 수정
 	- `MemberSearchCond`: 사용자 조회 검색 조건 변경 `email -> username`
 	- `MemberController`
 		- 사용자 추가 요청 코드 수정 -> 추가된 사용자 정보(id 제외)를 반환
-		- 사용자 로그인 코드 추가 -> 
 - `application.yml` 삭제 -> `application.properties`에 H2 DB 연결 설정만 작성
-- Spring framework 6.1 이상에서 파라미터 인식 오류 문제 해결 (해결 방법은 `CreateRealWorld.md`에 작성)
-- `JWT` 를 통한 사용자 인증 추가 2차 시도
+- Spring framework 6.1 이상에서 파라미터 인식 오류 문제 해결 (해결 방법은 `CreateRealWorld.md`에 작성)  
+<br/>
+
+### 24.03.09
+commit message : `add login system`
+- realworld 스펙에 맞춰 코드 수정
+	- `Member` 객체 한 번더 `User` 객체로 매핑
+- 사용자 로그인 기능 추가
+	- 입력된 `email`과 `password` 정보를 통해 일치하는 사용자 정보를 찾아 반환
