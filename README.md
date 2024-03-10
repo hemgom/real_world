@@ -42,4 +42,15 @@ commit message : `add login system`
 - realworld 스펙에 맞춰 코드 수정
 	- `Member` 객체 한 번더 `User` 객체로 매핑
 - 사용자 로그인 기능 추가
-	- 입력된 `email`과 `password` 정보를 통해 일치하는 사용자 정보를 찾아 반환
+	- 입력된 `email`과 `password` 정보를 통해 일치하는 사용자 정보를 찾아 반환  
+<br/>
+
+### 24.03.10
+commit message : `add application.yml & Edit RealworldApplication.java`
+- application.yml 추가
+	- 가독성 좋은 yml 파일로 변경
+	- h2 database 설정, jpa 설정 작성
+- `RealWorldApplication` 애노테이션 재설정
+	- @Import 삭제
+   	- @SpringBootApplication 옵션 삭제
+   	- 기존 방식처럼 사용하면 Controller 에서 DB Entity 에 접근하는데, 해당 부분을 수정하면서 설정을 변경함

@@ -80,7 +80,7 @@
 - 가시적으로 설정파일 인지 또는 Bean 등록을 할지 알 수 있음  
 <br/>
 
-### @RestController
+### @RestController-----------------------
 `Bean`의 타입을 `RestController`로 설정
 - 해당 컨트롤러는 사용자 요청을 받아 `json 값`으로 응답을 주겠다고 명시함
 - `@Controller`와 다르게 리턴 값에 자동으로 `@ResponseBdoy`가 붙어 별도로 명시하지 않아도 됨  
