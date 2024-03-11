@@ -2,13 +2,17 @@ package hello.real_world.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hello.real_world.domain.member.Member;
-import hello.real_world.dto.FindEntityDto;
+import hello.real_world.domain.member.QMember;
+import hello.real_world.dto.RequestLogin;
 import hello.real_world.dto.ResponseMember;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
-import static hello.real_world.domain.member.QMember.member;
+/**
+ * 엔티티에서 요청 정보와 같은 사용자를 검색
+ * email 과 password 가 둘다 일치하면 해당 사용자의 정보를 반환
+ */
 @Slf4j
 @Repository
 @RequiredArgsConstructor
@@ -17,17 +21,29 @@ public class QueryMemberRepositoryImpl implements QueryMemberRepository {
     private final JPAQueryFactory query;
 
     @Override
-    public Member findMember(ResponseMember loginInfo) {
+    public ResponseMember checkLoginInfo(RequestLogin request) {
 
-//        String email = loginInfo.getEmail();
-//        String password = loginInfo.getPassword();
-//        log.info("input data : email = {}, password = {}", email, password);
-//
-//        return query
-//                .select(member)
-//                .from(member)
-//                .where(FindEntityDto.likeEmail(email), FindEntityDto.likePassword(password))
-//                .fetchOne();
+        RequestLogin.LoginInfo loginInfo = RequestLogin.LoginInfo.addLoginInfo(request);
+        log.info("로그인 정보 : email ={}, password = {}", loginInfo.getEmail(), loginInfo.getPassword());
+
+        Member findMember = query
+                .select(QMember.member)
+                .from(QMember.member)
+                .where(QMember.member.email.like(loginInfo.getEmail()),
+                        QMember.member.password.like(loginInfo.getPassword()))
+                .fetchOne();
+
+        if (findMember != null) {
+
+            ResponseMember.UserInfo userInfo = ResponseMember.UserInfo.builder()
+                    .email(findMember.getEmail())
+                    .username(findMember.getUsername())
+                    .bio(findMember.getBio())
+                    .image(findMember.getImage())
+                    .build();
+
+            return new ResponseMember(userInfo);
+        }
 
         return null;
     }

@@ -1,6 +1,7 @@
 package hello.real_world.controller;
 
 import hello.real_world.dto.RequestAddMember;
+import hello.real_world.dto.RequestLogin;
 import hello.real_world.dto.ResponseMember;
 import hello.real_world.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -25,10 +26,10 @@ public class MemberController {
         return memberService.save(request);
     }
 
-//    @PostMapping("/login")
-//    public ResponseMember login(@RequestBody ResponseMember loginInfo) {
-//        log.info("POST 로그인 요청");
-//        return new ResponseMember(memberService.findMember(loginInfo));
-//    }
+    @PostMapping("/login")
+    public ResponseMember login(@RequestBody RequestLogin request) {
+        log.info("POST 로그인 요청");
+        return memberService.userLogin(request);
+    }
 
 }

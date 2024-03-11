@@ -5,8 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
-/*
+/**
  * 사용자 정보 응답 DTO
  * realWorld 응답 spec 에 맞춰 작성
  */

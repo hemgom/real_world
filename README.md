@@ -71,4 +71,16 @@ commit message : `edit repository package & addMember logic`
 	- 위와 같은 상태에서 더 이상 `Controller`가 `Member`에 대해 모르도록 코드를 수정
 		- 요청을 받아 사용자 가입 정보를 추출하며, `RequestAddMember`를 통해 작업을 수행
 		- 추출한 가입 정보를 `Member`의 `addMemberInfo()` 메서드를 통해 엔티티를 등록
-		- 사용자 정보가 정상적으로 등록됬다면 가입 정보를 `ResponseMember`에 담아서 반환
+		- 사용자 정보가 정상적으로 등록됬다면 가입 정보를 `ResponseMember`에 담아서 반환  
+<br/>
+
+### 24.03.12
+commit message : `add login system`
+- 로그인 시스템 적용
+	- 요청 받은 사용자의 정보를 토대로 DB에서 `email`과 `passwor`가 일치하는 사용자를 검색
+	- 일치하는 사용자가 있다면 해당 사용자의 정보를 반환, 없다면 `null` 반환
+- `QueryMemberRepositoryImpl.checkLoginInfo(RequestLogin request)`: DB에 접근해 요청 정보와 일치하는 사용자 반환, 없다면 null 반환
+- `RequestLogin`: 로그인 요청 정보를 전달하는 DTO
+	- `LoginInfo`: `RequestLogin` 클래스의 하위 중첩 클래스로 로그인 요청 정보인 `email`과 `password`를 저장 할 수 있음
+	- `addLoginInfo(RequestLogin request)`: 로그인 요청 정보를 `LoginInfo` 객체에 저장하는 메서드
+	- 중첩 클래스로 설계한 이유는 `realWorld specs`에 맞췄을 때, 사용자 정보를 `user`가 가지고 있기 때문임

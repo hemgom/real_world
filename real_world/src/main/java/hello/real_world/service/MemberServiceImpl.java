@@ -2,6 +2,7 @@ package hello.real_world.service;
 
 import hello.real_world.domain.member.Member;
 import hello.real_world.dto.RequestAddMember;
+import hello.real_world.dto.RequestLogin;
 import hello.real_world.dto.ResponseMember;
 import hello.real_world.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +23,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member findMember(ResponseMember loginInfo) {
-        return memberRepository.findMember(loginInfo);
+    public ResponseMember userLogin(RequestLogin request) {
+        return memberRepository.checkLoginInfo(request);
     }
 
 }

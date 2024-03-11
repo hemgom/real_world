@@ -1,8 +1,11 @@
 package hello.real_world.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-/*
+/**
  * 현재 사용자 정보가 user 로 감싸 입력됨
  * 입력 값에서 사용자 정보를 가져와 User 에 저장
  */
