@@ -1,7 +1,7 @@
 package hello.real_world.controller;
 
-import hello.real_world.domain.member.Member;
-import hello.real_world.dto.UserDto;
+import hello.real_world.dto.RequestAddMember;
+import hello.real_world.dto.ResponseMember;
 import hello.real_world.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,17 +20,15 @@ public class MemberController {
 
     // 사용자 추가
     @PostMapping
-    public UserDto addMember(@RequestBody UserDto user) {
+    public ResponseMember addMember(@RequestBody RequestAddMember request) {
         log.info("POST 사용자 등록 요청");
-        Member member = user.getUser();
-        log.info("input data : member = {}", member);
-        return new UserDto(memberService.save(member));
+        return memberService.save(request);
     }
 
-    @PostMapping("/login")
-    public UserDto login(@RequestBody UserDto loginInfo) {
-        log.info("POST 로그인 요청");
-        return new UserDto(memberService.findMember(loginInfo));
-    }
+//    @PostMapping("/login")
+//    public ResponseMember login(@RequestBody ResponseMember loginInfo) {
+//        log.info("POST 로그인 요청");
+//        return new ResponseMember(memberService.findMember(loginInfo));
+//    }
 
 }

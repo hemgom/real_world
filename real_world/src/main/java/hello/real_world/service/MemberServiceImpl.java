@@ -1,7 +1,8 @@
 package hello.real_world.service;
 
 import hello.real_world.domain.member.Member;
-import hello.real_world.dto.UserDto;
+import hello.real_world.dto.RequestAddMember;
+import hello.real_world.dto.ResponseMember;
 import hello.real_world.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,12 +15,15 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
 
     @Override
-    public Member save(Member member) {
-        return memberRepository.save(member);
+    public ResponseMember save(RequestAddMember request) {
+        RequestAddMember.JoinInfo joinInfo = RequestAddMember.JoinInfo.addUserInfo(request);
+        memberRepository.save(Member.addMemberInfo(joinInfo));
+        return new ResponseMember(ResponseMember.UserInfo.getJoinInfo(joinInfo));
     }
 
     @Override
-    public Member findMember(UserDto loginInfo) {
+    public Member findMember(ResponseMember loginInfo) {
         return memberRepository.findMember(loginInfo);
     }
+
 }

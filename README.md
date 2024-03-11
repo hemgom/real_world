@@ -54,3 +54,21 @@ commit message : `add application.yml & Edit RealworldApplication.java`
 	- @Import 삭제
    	- @SpringBootApplication 옵션 삭제
    	- 기존 방식처럼 사용하면 Controller 에서 DB Entity 에 접근하는데, 해당 부분을 수정하면서 설정을 변경함
+- `Member` 기본 생성자 설정	
+	- `NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
+	- 기본 생성자의 사용처가 있기에 다른 곳에서 기본 생성자를 접근하지 못하도록 접근제한자를 설정함  
+<br/>
+
+### 24.03.11
+commit message : `edit repository package & addMember logic`
+- repository 패키지 수정
+	- 기존 repository 를 `SpringDataJpa`를 사용하도록 변경
+		- `MemberRepository` 인터페이스가 `JpaRepository` 인터페이스와 `QueryMemberRepository` 인터페이스르 상속
+		- 앞으로 `DB 저장(엔티티 영속화)`은 `SpringDataJpa`를 통해서 함
+		- 조회나 다른 기능의 경우 `SpringDataJpa`로는 한계가 있어 `Querydsl`을 사용함
+- 사용자 등록 설계 수정
+	- 기존 로직에서는 `Controller`가 `Member`에 까지 접근을 할 수 있었음
+	- 위와 같은 상태에서 더 이상 `Controller`가 `Member`에 대해 모르도록 코드를 수정
+		- 요청을 받아 사용자 가입 정보를 추출하며, `RequestAddMember`를 통해 작업을 수행
+		- 추출한 가입 정보를 `Member`의 `addMemberInfo()` 메서드를 통해 엔티티를 등록
+		- 사용자 정보가 정상적으로 등록됬다면 가입 정보를 `ResponseMember`에 담아서 반환
