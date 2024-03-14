@@ -108,6 +108,7 @@ public class JwtUtilImpl implements JwtUtil {
                         .toList();
 
         UserDetails principal = new User(claims.getSubject(), "", authorities);
+        log.info("Check principal = {}", principal);
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 

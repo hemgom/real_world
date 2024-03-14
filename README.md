@@ -92,4 +92,12 @@ commit message : 'add jwt'
 - `JWT`: 사용자 인증(토큰 기반 - JWT) 스펙 추가
 	- 로그인 성공 시 `JWT(accessToken)` 발급 기능 추가
 	- 하지만 현재 JWT 발급만 구현됬을 뿐 토큰을 헤더에 추가해 사용할 수 있도록 추가 작업이 필요함
-		- 정확하게는 토큰에 담긴 정보를 토대로 사용자 권한을 구분하는 기능 구현이 미완성
+		- 정확하게는 토큰에 담긴 정보를 토대로 사용자 권한을 구분하는 기능 구현이 미완성  
+<br/>
+
+### 24.03.15
+commit message : `edit SecurityConfig`
+- 인증 정보가 필요한 API 를 설정하고 해당 인증 조건을 만족할 경우 API 요청이 수행되도록 조건 추가
+	- `Controller`의 `"/users/test"` 요청 수행 (JWT 를 헤더의 Authentication 에 담아 요청)
+		- JWT 일치 : "success" 문자열 출력
+		- JWT 불일치 : null 출력
