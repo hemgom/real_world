@@ -159,4 +159,44 @@ dependencies {
 4. 타입 캐스트 비용 발생
    - 꺼내는 데이터가 많을 수록 비용이 증가하고 이는 불필요한 비용을 늘리는 꼴
 5. 불변성을 확보 불가능
-   - 자칫 불변성을 유지해야하는 데이터가 실수로 사라지거나 변경되는 불상사가 발생할 수 있음
+   - 자칫 불변성을 유지해야하는 데이터가 실수로 사라지거나 변경되는 불상사가 발생할 수 있음  
+<br/><br/>
+
+## Authentication(인증)과 Authorization(권한부여)
+- `Authentication`: 로그인 처럼 사용자 또는 프로세스의 신원을 확인하는 프로세스
+- `Authorization`: 누가 무엇을 할 수 있는지 결정하는 규칙  
+<br/><br/>
+
+## Spring Boot Security + JWT 동작 원리
+1. `클라이언트 -> 서버`: ID/PW 정보로 로그인 요청
+2. `클라이언트 <- 서버`: 로그인 정보 검증 후 `AccessToken + RefreshToken`을 발급
+3. `클라이언트 -> 서버`: 요청 헤더에 발급 받은 `AccessToken`을 포함해 API 요청
+   - `AccessToken` 검증 통과 시
+     1. `클라이언트 <- 서버`: 요청된 API 수행 후 결과 반환
+   - `AccessToken` 만료 시
+     1. `클라이언트 <- 서버`: `AccessToken` 만료 응답
+     2. `클라이언트 -> 서버`: `AccessToken + RefreshToken` 재발급 요청
+     3. `클라이언트 <- 서버`: 토큰 검증 후 `AccessToken + RefreshToken` 재발급  
+<br/>
+
+### Token
+- `AccessToken`: 인증된 사용자가 특정 리로스에 접근할 때 사용되는 토큰
+  - 클라이언트는 해당 토큰을 사용해 `사용자 신원 확인`, `서비스(or 리소스)에 접근`
+  - 유효 기간이 지나면 만료 됨 (expired)
+  - 토큰 만료 시, 새로운 `AccessToken` 발급을 위해 `RefreshToken`을 사용 함
+- `RefreshToken`: `AccessToken` 갱신을 위해 사용된 토큰
+  - 일반적으로 `AccessToken` 발급시 함께 발급 됨
+  - `AccessToken` 만료 시 새로운 토큰을 발급 받는데 사용 됨
+  - 사용자의 `지속적인 인증 상태`를 유지할 수 있게 도와줌 (=매번 로그인을 다시 하지 않아도 됨)
+  - 보안 상의 이유로 `AccessToken`보다 긴 유효 기간을 가짐  
+<br/>
+
+### 왜 두 개의 토큰을 사용할까?
+- `AccessToken` 단일 사용 시 (문제 발생 예상)
+  - `AccessToken`는 사용자의 검증을 위해 사용자의 정보를 담고 있음
+  - 그렇기에 `토큰 탈취`에 주의해야 하는데 해당 토큰에 대한 정보를 지키기 위해 유효시간을 짧게 가져가야 함
+  - 하지만 유효 시간을 짧게 가져갈 수록 이용자는 반복해 로그인을 재시도 해야하는 상황 발생
+- `AccessToken + RefreshToken` 사용 시
+  - `AccessToken`의 유효 시간을 짧게 가져가며 유효 만료 시 `RefreshToken`을 통해 갱신
+  - 그렇기에 이용자가 서비스 이용 중 `AccessToken` 만료로 로그아웃 되는 상황 방지 됨
+  - 설령 `RefreshToken`이 탈취 당해도 해당 토큰에는 사용자와 관련된 정보가 없어 상대적으로 안전함

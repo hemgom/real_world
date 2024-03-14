@@ -3,10 +3,12 @@ package hello.real_world.repository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hello.real_world.domain.member.Member;
 import hello.real_world.domain.member.QMember;
+import hello.real_world.dto.JwtInfo;
 import hello.real_world.dto.RequestLogin;
 import hello.real_world.dto.ResponseMember;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -21,7 +23,7 @@ public class QueryMemberRepositoryImpl implements QueryMemberRepository {
     private final JPAQueryFactory query;
 
     @Override
-    public ResponseMember checkLoginInfo(RequestLogin request) {
+    public ResponseMember.UserInfo checkLoginInfo(RequestLogin request) {
 
         RequestLogin.LoginInfo loginInfo = RequestLogin.LoginInfo.addLoginInfo(request);
         log.info("로그인 정보 : email ={}, password = {}", loginInfo.getEmail(), loginInfo.getPassword());
@@ -42,7 +44,7 @@ public class QueryMemberRepositoryImpl implements QueryMemberRepository {
                     .image(findMember.getImage())
                     .build();
 
-            return new ResponseMember(userInfo);
+            return userInfo;
         }
 
         return null;

@@ -75,7 +75,7 @@ commit message : `edit repository package & addMember logic`
 <br/>
 
 ### 24.03.12
-commit message : `add login system`
+commit message : `add login system (checkLoginInfo)`
 - 로그인 시스템 적용
 	- 요청 받은 사용자의 정보를 토대로 DB에서 `email`과 `passwor`가 일치하는 사용자를 검색
 	- 일치하는 사용자가 있다면 해당 사용자의 정보를 반환, 없다면 `null` 반환
@@ -84,3 +84,12 @@ commit message : `add login system`
 	- `LoginInfo`: `RequestLogin` 클래스의 하위 중첩 클래스로 로그인 요청 정보인 `email`과 `password`를 저장 할 수 있음
 	- `addLoginInfo(RequestLogin request)`: 로그인 요청 정보를 `LoginInfo` 객체에 저장하는 메서드
 	- 중첩 클래스로 설계한 이유는 `realWorld specs`에 맞췄을 때, 사용자 정보를 `user`가 가지고 있기 때문임
+- `Controller`는 엔티티를 모르고 있으며 이는 `MemberServiceImpl`이나 `RequestLogin`, `ResponseMember`의 `import`를 통해 확인 할 수 있음  
+<br/>
+
+### 24.03.14
+commit message : 'add jwt'
+- `JWT`: 사용자 인증(토큰 기반 - JWT) 스펙 추가
+	- 로그인 성공 시 `JWT(accessToken)` 발급 기능 추가
+	- 하지만 현재 JWT 발급만 구현됬을 뿐 토큰을 헤더에 추가해 사용할 수 있도록 추가 작업이 필요함
+		- 정확하게는 토큰에 담긴 정보를 토대로 사용자 권한을 구분하는 기능 구현이 미완성

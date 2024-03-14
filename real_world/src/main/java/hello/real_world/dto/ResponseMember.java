@@ -1,9 +1,6 @@
 package hello.real_world.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * 사용자 정보 응답 DTO
@@ -29,6 +26,7 @@ public class ResponseMember {
     public static class UserInfo {
 
         private String email;       // 사용자 ID
+        private String token;       // jwt accessToken
         private String username;    // 사용자 이름
         private String bio;         // 사용자 소개
         private String image;       // 사용자 프로필 사진
@@ -41,6 +39,17 @@ public class ResponseMember {
                     .build();
         }
 
+//        public static void setToken(String accessToken) {
+//
+//            UserInfo.builder()
+//                    .token(accessToken)
+//                    .build();
+//
+//        }
+
+        public void setToken(String accessToken) {
+            token = accessToken;
+        }
     }
 
 }

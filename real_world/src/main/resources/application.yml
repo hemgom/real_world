@@ -24,3 +24,9 @@ spring:
       hibernate:
         format_sql: true
         show_sql: true
+
+jwt:
+  # 암호 키 설정 - 토큰 암호화/복호화에 사용
+  secret: 64461f01e1af406da538b9c48d801ce59142452199ff112fb5404c8e7e98e3ff
+  accessToken_valid_time: 86400000      # 1일
+  refreshToken_valid_time: 2592000000   # 30일
