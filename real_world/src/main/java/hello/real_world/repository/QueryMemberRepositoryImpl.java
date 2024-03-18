@@ -2,14 +2,16 @@ package hello.real_world.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hello.real_world.domain.member.Member;
-import hello.real_world.domain.member.QMember;
-import hello.real_world.dto.JwtInfo;
 import hello.real_world.dto.RequestLogin;
+import hello.real_world.dto.RequestUpdateMember;
 import hello.real_world.dto.ResponseMember;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import static hello.real_world.domain.member.QMember.member;
 
 /**
  * 엔티티에서 요청 정보와 같은 사용자를 검색
@@ -29,10 +31,10 @@ public class QueryMemberRepositoryImpl implements QueryMemberRepository {
         log.info("로그인 정보 : email ={}, password = {}", loginInfo.getEmail(), loginInfo.getPassword());
 
         Member findMember = query
-                .select(QMember.member)
-                .from(QMember.member)
-                .where(QMember.member.email.like(loginInfo.getEmail()),
-                        QMember.member.password.like(loginInfo.getPassword()))
+                .select(member)
+                .from(member)
+                .where(member.email.like(loginInfo.getEmail()),
+                        member.password.like(loginInfo.getPassword()))
                 .fetchOne();
 
         if (findMember != null) {
@@ -46,6 +48,28 @@ public class QueryMemberRepositoryImpl implements QueryMemberRepository {
 
             return userInfo;
         }
+
+        return null;
+    }
+
+    @Override
+    public ResponseMember.UserInfo updateMemberInfo(RequestUpdateMember request, Authentication authentication) {
+
+        RequestUpdateMember.UpdateInfo updateInfo = RequestUpdateMember.UpdateInfo.addUpdateInfo(request);
+        log.info("사용자 수정 정보 : email = {}", updateInfo.getEmail());
+        log.info("사용자 수정 정보 : username = {}", updateInfo.getUsername());
+        log.info("사용자 수정 정보 : password = {}", updateInfo.getPassword());
+        log.info("사용자 수정 정보 : bio = {}", updateInfo.getBio());
+        log.info("사용자 수정 정보 : image = {}", updateInfo.getImage());
+
+        long editInfo = query
+                .update(member)
+                .where(member.email.eq(authentication.getName()))
+                .set(member.email, updateInfo.getEmail())
+                .execute();
+
+
+
 
         return null;
     }

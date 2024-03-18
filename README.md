@@ -100,4 +100,16 @@ commit message : `edit SecurityConfig`
 - 인증 정보가 필요한 API 를 설정하고 해당 인증 조건을 만족할 경우 API 요청이 수행되도록 조건 추가
 	- `Controller`의 `"/users/test"` 요청 수행 (JWT 를 헤더의 Authentication 에 담아 요청)
 		- JWT 일치 : "success" 문자열 출력
-		- JWT 불일치 : null 출력
+		- JWT 불일치 : null 출력  
+<br/>
+
+### 24.03.18
+commit message : `edit dependencies`
+- 의존관계 수정
+	- `JwtUtilImpl`은 현재 `저장`과 관련 없이 `JWT 생성` 목적으로 사용되고 있다.
+	- 하지만 현재 `MemberRepository` 인터페이스가 `JwtUtil` 인터페이스가를 상속 이를 `MemberServiceImpl`에서 주입받은 상황이다.
+	- 그래서 `목적(의도)`에 맞춰 의존관계를 수정하였다.
+		- `JwtUtil`을 특정 인터페이스에 상속시키지 않고 바로 `MemberServiceImpl`에 주입
+	- 결과적으로 `MemberServiceImpl`가 주입받는 인터페이스와 `목적(의도)`는 아래와 같음
+		- `MemberRepository`: `Member` 엔티티를 DB에 저장하고 이를 다루는 메서드들
+		- `JwtUtil`: `JWT`를 생성하고 이를 다루는 메서드들, DB에 따로 저장되는 것이 없음
