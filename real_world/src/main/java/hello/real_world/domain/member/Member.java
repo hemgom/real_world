@@ -1,12 +1,12 @@
 package hello.real_world.domain.member;
 
 import hello.real_world.dto.RequestAddMember;
-import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import hello.real_world.dto.RequestUpdateMember;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.*;
 
 // 사용자 정보
 @Getter
@@ -34,5 +34,30 @@ public class Member {
                 .password(joinInfo.getPassword())
                 .build();
     }
+
+    public void updateMemberInfo(RequestUpdateMember.UpdateInfo updateInfo) {
+
+        if (updateInfo.getEmail() != null) {
+            this.email = updateInfo.getEmail();
+        }
+
+        if (updateInfo.getPassword() != null) {
+            this.password = updateInfo.getPassword();
+        }
+
+        if (updateInfo.getUsername() != null) {
+            this.username = updateInfo.getUsername();
+        }
+
+        if (updateInfo.getBio() != null) {
+            this.bio = updateInfo.getBio();
+        }
+
+        if (updateInfo.getImage() != null) {
+            this.image = updateInfo.getImage();
+        }
+
+    }
+
 
 }

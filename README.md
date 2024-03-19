@@ -112,4 +112,20 @@ commit message : `edit dependencies`
 		- `JwtUtil`을 특정 인터페이스에 상속시키지 않고 바로 `MemberServiceImpl`에 주입
 	- 결과적으로 `MemberServiceImpl`가 주입받는 인터페이스와 `목적(의도)`는 아래와 같음
 		- `MemberRepository`: `Member` 엔티티를 DB에 저장하고 이를 다루는 메서드들
-		- `JwtUtil`: `JWT`를 생성하고 이를 다루는 메서드들, DB에 따로 저장되는 것이 없음
+		- `JwtUtil`: `JWT`를 생성하고 이를 다루는 메서드들, DB에 따로 저장되는 것이 없음  
+<br/>
+
+### 24.03.19
+commit message : `add memberInfo update system`
+- 사용자 정보 수정 기능 추가
+	- `Controller - updateMember()`: 입력받은 요청 정보를 `MemberService`에 넘김
+		- `RequestUpdateMember request`: `요청 정보(Body)` 데이터를 저장하는 전용 DTO에 담기 위해 사용
+		- `String jwt`: `요청 헤더` 정보 중 `Authorization`의 jwt 을 저장하기 위해 사용
+		- `Authentication authentication`: 인증 객체에서 `getName()`를 통해 사용자 정보를 찾기 위해 사용
+	- `MemberServiceImpl - updateMember()`: `Controller`에서 넘겨 받은 정보 중 요청 정보와 인증 정보를 `MemberRepository`에 넘기고 `jwt`는 응답용 DTO에 저장
+		- `MemberRepository`에 요청정보와 인증정보를 넘기고 업데이트된 `Member` 객체를 받아 DB에 저장
+		- 반환 받은 `Member` 객체의 `Id` 값을 통해 찾은 사용자 정보를 응답용 DTO의 하위 클래스에 저장
+		- `jwt`는 `"Bearer " + accessToken`으로 되어있기 때문에 `"Bearer "` 부분을 공백으로 바꿔 응답용 DTO의 하위 클래스에 저장
+		- 응답용 DTO의 하위 클래스에 저장된 정보를 응답용 DTO에 담아 반환
+	- `QueryMemberRepositoryImpl - updateMemberInfo()`: 인증정보에 담긴 `사용자 email`을 통해 DB에서 해당하는 사용자 정보를 조회 후 요청정보에 따라 사용자 정보 업데이트
+	- `QueryMemberRepositoryImpl - findMemberById()`: `Id` 값을 통해 DB에서 사용자 정보 조회 후 사용자 정보를 응답용 DTO 하위 클래스에 저장해 반환

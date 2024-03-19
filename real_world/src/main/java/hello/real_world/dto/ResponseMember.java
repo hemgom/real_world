@@ -39,16 +39,8 @@ public class ResponseMember {
                     .build();
         }
 
-//        public static void setToken(String accessToken) {
-//
-//            UserInfo.builder()
-//                    .token(accessToken)
-//                    .build();
-//
-//        }
-
         public void setToken(String accessToken) {
-            token = accessToken;
+            this.token = accessToken;
         }
     }
 

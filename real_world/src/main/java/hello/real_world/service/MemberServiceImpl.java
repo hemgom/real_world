@@ -1,15 +1,15 @@
 package hello.real_world.service;
 
 import hello.real_world.domain.member.Member;
-import hello.real_world.dto.JwtInfo;
-import hello.real_world.dto.RequestAddMember;
-import hello.real_world.dto.RequestLogin;
-import hello.real_world.dto.ResponseMember;
+import hello.real_world.dto.*;
 import hello.real_world.repository.MemberRepository;
 import hello.real_world.security.JwtUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 // 'MemberService' 구현체 클래스, 대부분 기능을 'repository' 에 위임
 @Slf4j
@@ -39,6 +39,16 @@ public class MemberServiceImpl implements MemberService {
         userInfo.setToken(jwtInfo.getAccessToken());
         log.info("loginUserToken = {}", userInfo.getToken());
 
+        return new ResponseMember(userInfo);
+    }
+
+    @Override
+    public ResponseMember updateMember(RequestUpdateMember request, String jwt, Authentication authentication) {
+        Member updateMember = memberRepository.updateMemberInfo(request, authentication);
+        memberRepository.save(updateMember);
+        ResponseMember.UserInfo userInfo = memberRepository.findMemberById(updateMember.getId());
+
+        userInfo.setToken(jwt.replace("Bearer ", ""));
         return new ResponseMember(userInfo);
     }
 

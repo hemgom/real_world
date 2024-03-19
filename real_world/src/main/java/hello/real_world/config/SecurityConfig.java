@@ -31,6 +31,7 @@ public class SecurityConfig {
                                 .requestMatchers("/users").permitAll()              // 해당 API에 대해선 모든 요청 허가
                                 .requestMatchers("/users/login").permitAll()
                                 .requestMatchers("/users/test").hasAnyAuthority("USER")    // 해당 API에 대해선 USER 권한 필요
+                                .requestMatchers("/user").hasAnyAuthority("USER")
                                 .anyRequest().authenticated()                         // 그 밖의 요청에 대해서 인증이 필요
                 );
 

@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import static hello.real_world.domain.member.QMember.member;
 
@@ -33,8 +32,8 @@ public class QueryMemberRepositoryImpl implements QueryMemberRepository {
         Member findMember = query
                 .select(member)
                 .from(member)
-                .where(member.email.like(loginInfo.getEmail()),
-                        member.password.like(loginInfo.getPassword()))
+                .where(member.email.eq(loginInfo.getEmail()),
+                        member.password.eq(loginInfo.getPassword()))
                 .fetchOne();
 
         if (findMember != null) {
@@ -53,7 +52,7 @@ public class QueryMemberRepositoryImpl implements QueryMemberRepository {
     }
 
     @Override
-    public ResponseMember.UserInfo updateMemberInfo(RequestUpdateMember request, Authentication authentication) {
+    public Member updateMemberInfo(RequestUpdateMember request, Authentication authentication) {
 
         RequestUpdateMember.UpdateInfo updateInfo = RequestUpdateMember.UpdateInfo.addUpdateInfo(request);
         log.info("사용자 수정 정보 : email = {}", updateInfo.getEmail());
@@ -62,14 +61,35 @@ public class QueryMemberRepositoryImpl implements QueryMemberRepository {
         log.info("사용자 수정 정보 : bio = {}", updateInfo.getBio());
         log.info("사용자 수정 정보 : image = {}", updateInfo.getImage());
 
-        long editInfo = query
-                .update(member)
+        Member findMember = query
+                .select(member)
+                .from(member)
                 .where(member.email.eq(authentication.getName()))
-                .set(member.email, updateInfo.getEmail())
-                .execute();
+                .fetchOne();
 
+        if (findMember != null) {
+            findMember.updateMemberInfo(updateInfo);
+        }
 
+        return findMember;
+    }
 
+    @Override
+    public ResponseMember.UserInfo findMemberById(Long id) {
+        Member findMember = query
+                .select(member)
+                .from(member)
+                .where(member.id.eq(id))
+                .fetchOne();
+
+        if (findMember != null) {
+            return ResponseMember.UserInfo.builder()
+                    .email(findMember.getEmail())
+                    .username(findMember.getUsername())
+                    .bio(findMember.getBio())
+                    .image(findMember.getImage())
+                    .build();
+        }
 
         return null;
     }
