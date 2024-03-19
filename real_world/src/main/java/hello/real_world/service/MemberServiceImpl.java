@@ -22,9 +22,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public ResponseMember save(RequestAddMember request) {
-        RequestAddMember.JoinInfo joinInfo = RequestAddMember.JoinInfo.addUserInfo(request);
-        memberRepository.save(Member.addMemberInfo(joinInfo));
-        return new ResponseMember(ResponseMember.UserInfo.getJoinInfo(joinInfo));
+        RequestAddMember.JoinInfo joinInfo = RequestAddMember.JoinInfo.setJoinInfo(request);
+        memberRepository.save(Member.setMemberInfo(joinInfo));
+        return new ResponseMember(ResponseMember.UserInfo.setUserInfo(joinInfo));
     }
 
     @Override

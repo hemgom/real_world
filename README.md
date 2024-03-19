@@ -128,4 +128,23 @@ commit message : `add memberInfo update system`
 		- `jwt`는 `"Bearer " + accessToken`으로 되어있기 때문에 `"Bearer "` 부분을 공백으로 바꿔 응답용 DTO의 하위 클래스에 저장
 		- 응답용 DTO의 하위 클래스에 저장된 정보를 응답용 DTO에 담아 반환
 	- `QueryMemberRepositoryImpl - updateMemberInfo()`: 인증정보에 담긴 `사용자 email`을 통해 DB에서 해당하는 사용자 정보를 조회 후 요청정보에 따라 사용자 정보 업데이트
-	- `QueryMemberRepositoryImpl - findMemberById()`: `Id` 값을 통해 DB에서 사용자 정보 조회 후 사용자 정보를 응답용 DTO 하위 클래스에 저장해 반환
+	- `QueryMemberRepositoryImpl - findMemberById()`: `Id` 값을 통해 DB에서 사용자 정보 조회 후 사용자 정보를 응답용 DTO 하위 클래스에 저장해 반환  
+<br/>
+
+commit message : `edit method name`
+- 현재까지 작성된 메서드 이름 수정 : 최대한 의도한바에 맞춰 메서드를 작성했으나 보편적으로 사용하는 방식이 아니어서 헷갈려 메서드 이름을 수정
+	- `RequestAddMember`: `addUserInfo() -> setJoinInfo()`
+		- 해당 메서드는 요청정보를 파라미터로 해 요청정보를 `RequestAddMember.JoinInfo` 객체에 저장하는 용도
+		- `add`라는 표현 보다는 정보를 세팅하므로 `set`사용, 세팅 정보는 `가입정보`이므로 `User -> Join`으로 바꿔줌
+	- `Member`: `addMemberInfo() -> setMemberInfo()`
+		- 해당 메서드는 `가입정보`를 `Member` 객체에 저장하는 용도
+		- `add`라는 표현보다, 정보를 세팅하기에 `set`을 사용
+	- `ResponseMember`: `getJoinInfo() -> setUserInfo()`
+		- 해당 메서드는 `가입정보`를 `ResponseMember(응답 DTO)`에 저장하는 용도
+		- 값을 가져오는 것이 아닌 세팅이므로 `get -> set`으로 변경, 세팅 정보는 `사용자 정보`이므로 `Join -> User`로 변경
+	- `RequestLogin`: `addLoginInfo() -> setLoginInfo()`
+		- 해당 메서드는 `요청 정보`를 `RequestLogin.LoginInfo` 객체에 저장하는 용도
+		- `add`라는 표현보다, 정보를 세팅하기에 `set`을 사용
+	- `RequestUpdateMember`: `addUpdateInfo() -> setUpdateInfo()`
+		- 해당 메서드는 `요청 정보`를 `RequestUpdateMember.UpdateInfo` 객체에 저장하는 용도
+		- `add`라는 표현보다, 정보를 세팅하기에 `set`을 사용

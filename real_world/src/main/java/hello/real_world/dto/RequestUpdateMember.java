@@ -22,7 +22,7 @@ public class RequestUpdateMember {
         private String bio;
         private String image;
 
-        public static UpdateInfo addUpdateInfo(RequestUpdateMember request) {
+        public static UpdateInfo setUpdateInfo(RequestUpdateMember request) {
 
             return UpdateInfo.builder()
                     .email(request.getUser().getEmail())

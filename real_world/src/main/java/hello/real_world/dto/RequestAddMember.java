@@ -25,7 +25,7 @@ public class RequestAddMember {
         private String email;       // 사용자 ID
         private String password;    // 사용자 PW
 
-        public static JoinInfo addUserInfo(RequestAddMember request) {
+        public static JoinInfo setJoinInfo(RequestAddMember request) {
 
             return JoinInfo.builder()
                     .email(request.user.getEmail())

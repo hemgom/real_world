@@ -27,7 +27,7 @@ public class Member {
     private String bio;         // 사용자 소개
     private String image;       // 사용자 프로필 사진
 
-    public static Member addMemberInfo(RequestAddMember.JoinInfo joinInfo) {
+    public static Member setMemberInfo(RequestAddMember.JoinInfo joinInfo) {
         return Member.builder()
                 .email(joinInfo.getEmail())
                 .username(joinInfo.getUsername())

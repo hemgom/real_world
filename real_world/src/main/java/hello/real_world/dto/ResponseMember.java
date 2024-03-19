@@ -31,7 +31,7 @@ public class ResponseMember {
         private String bio;         // 사용자 소개
         private String image;       // 사용자 프로필 사진
 
-        public static UserInfo getJoinInfo(RequestAddMember.JoinInfo joinInfo) {
+        public static UserInfo setUserInfo(RequestAddMember.JoinInfo joinInfo) {
 
             return UserInfo.builder()
                     .email(joinInfo.getEmail())

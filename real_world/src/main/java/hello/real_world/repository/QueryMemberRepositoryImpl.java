@@ -26,7 +26,7 @@ public class QueryMemberRepositoryImpl implements QueryMemberRepository {
     @Override
     public ResponseMember.UserInfo checkLoginInfo(RequestLogin request) {
 
-        RequestLogin.LoginInfo loginInfo = RequestLogin.LoginInfo.addLoginInfo(request);
+        RequestLogin.LoginInfo loginInfo = RequestLogin.LoginInfo.setLoginInfo(request);
         log.info("로그인 정보 : email ={}, password = {}", loginInfo.getEmail(), loginInfo.getPassword());
 
         Member findMember = query
@@ -37,15 +37,12 @@ public class QueryMemberRepositoryImpl implements QueryMemberRepository {
                 .fetchOne();
 
         if (findMember != null) {
-
-            ResponseMember.UserInfo userInfo = ResponseMember.UserInfo.builder()
+            return ResponseMember.UserInfo.builder()
                     .email(findMember.getEmail())
                     .username(findMember.getUsername())
                     .bio(findMember.getBio())
                     .image(findMember.getImage())
                     .build();
-
-            return userInfo;
         }
 
         return null;
@@ -54,7 +51,7 @@ public class QueryMemberRepositoryImpl implements QueryMemberRepository {
     @Override
     public Member updateMemberInfo(RequestUpdateMember request, Authentication authentication) {
 
-        RequestUpdateMember.UpdateInfo updateInfo = RequestUpdateMember.UpdateInfo.addUpdateInfo(request);
+        RequestUpdateMember.UpdateInfo updateInfo = RequestUpdateMember.UpdateInfo.setUpdateInfo(request);
         log.info("사용자 수정 정보 : email = {}", updateInfo.getEmail());
         log.info("사용자 수정 정보 : username = {}", updateInfo.getUsername());
         log.info("사용자 수정 정보 : password = {}", updateInfo.getPassword());

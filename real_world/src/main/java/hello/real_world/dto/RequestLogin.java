@@ -22,7 +22,7 @@ public class RequestLogin {
         private String email;       // 로그인 ID - 사용자 email
         private String password;    // 로그인 PW - 사용자 password
 
-        public static LoginInfo addLoginInfo(RequestLogin request) {
+        public static LoginInfo setLoginInfo(RequestLogin request) {
 
             return LoginInfo.builder()
                     .email(request.user.getEmail())
