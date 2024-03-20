@@ -206,4 +206,18 @@ dependencies {
 지금까지는 어떻게든 최소한의 의존관계를 통해 코드를 짜는 것에 `강박(?)`을 가졌다.
 - 하지만 중요한 것은 의존관계를 주입하는 `의도`라는 것을 알게 되었다.
 - 분명한 목적을 가지고 `클래스` 또는 `인터페이스`를 주입하는 것이 중요하다.
-- 의존관계가 추가됨에 따라 그 수가 증가하는 것만 주의할 것이 아니라 주입한 목적 또한 잘 생각해 봐야 한다.
+- 의존관계가 추가됨에 따라 그 수가 증가하는 것만 주의할 것이 아니라 주입한 목적 또한 잘 생각해 봐야 한다.  
+<br/><br/>
+
+## Converter
+속성 상태를 전환하는 기능을 다루며, 해당 프로젝트에서는 엔티티 테이블의 컬럼이 여러개의 값을 가질 수 있도록 사용됨
+- `Converter` 적용 시 사용 `annotation`
+  - `@Convert`: 기본 필드 또는 속성의 전환을 지정
+  - `@Converter`: `Converter`로 사용하겠다고 지정 및 적용 범위 정의
+- `FollowConverter` 클래스
+  - `AttributeConverter` 인터페이스를 상속
+    - 해당 인터페이스는 `엔티티 속성(attribute) 상태`를 `데이터베이스 컬럼 표현`으로 전환하고, 이를 역전환하는 메서드들을 가짐
+  - `Member`의 `List<String> followList`를 전환
+    - `DB 저장`: `List -> String` 전환하여 저장, `FollowConverter.convertToDataBaseColumn()`
+    - `정보 조회`: `String -> List` 전환하여 조회, `FollowConverter.convertToEntityAttribute()`
+  - 데이터 전환 메서드 구현에 `Stream`을 사용했으며 초기 `null`값에 대해선 해당 값을 반환하도록 함

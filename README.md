@@ -147,4 +147,14 @@ commit message : `edit method name`
 		- `add`라는 표현보다, 정보를 세팅하기에 `set`을 사용
 	- `RequestUpdateMember`: `addUpdateInfo() -> setUpdateInfo()`
 		- 해당 메서드는 `요청 정보`를 `RequestUpdateMember.UpdateInfo` 객체에 저장하는 용도
-		- `add`라는 표현보다, 정보를 세팅하기에 `set`을 사용
+		- `add`라는 표현보다, 정보를 세팅하기에 `set`을 사용  
+<br/>
+
+### 24.03.20
+commit message : `add followList in member filed`
+- 팔로우한 `username`을 저장할 리스트를 `Member` 필드에 추가
+	- `List<String> followList` 추가
+	- `@Convert`를 통해 테이블의 한 컬럼 내에서 N개의 값을 가지게 만듬
+		- `List -> String`으로 변환해 테이블에 저장 할 수 있게함
+- `FollowConverter` 추가
+	- DB에 저장시 `List -> String`으로, DB에서 값 조회시 `String -> List`로 전환하여 조회

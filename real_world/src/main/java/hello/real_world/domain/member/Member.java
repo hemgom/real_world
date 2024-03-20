@@ -1,12 +1,12 @@
 package hello.real_world.domain.member;
 
+import hello.real_world.Converter.FollowConverter;
 import hello.real_world.dto.RequestAddMember;
 import hello.real_world.dto.RequestUpdateMember;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 // 사용자 정보
 @Getter
@@ -20,12 +20,15 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String email;       // 사용자 ID
-    private String password;    // 사용자 PW
-    private String username;    // 사용자 이름
+    private String email;               // 사용자 ID
+    private String password;            // 사용자 PW
+    private String username;            // 사용자 이름
 
-    private String bio;         // 사용자 소개
-    private String image;       // 사용자 프로필 사진
+    private String bio;                 // 사용자 소개
+    private String image;               // 사용자 프로필 사진
+
+    @Convert(converter = FollowConverter.class)
+    private List<String> followList;    // 사용자 팔로우 목록
 
     public static Member setMemberInfo(RequestAddMember.JoinInfo joinInfo) {
         return Member.builder()
