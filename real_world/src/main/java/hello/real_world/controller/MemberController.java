@@ -1,9 +1,6 @@
 package hello.real_world.controller;
 
-import hello.real_world.dto.RequestAddMember;
-import hello.real_world.dto.RequestLogin;
-import hello.real_world.dto.RequestUpdateMember;
-import hello.real_world.dto.ResponseMember;
+import hello.real_world.dto.*;
 import hello.real_world.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -39,10 +36,11 @@ public class MemberController {
         return memberService.updateMember(request, jwt, authentication);
     }
 
-    @PostMapping("/users/test")
-
-    public String test(Authentication authentication) {
-        return authentication.getName();
+    @GetMapping("/profiles/{username}")
+    public ResponseProfile getProfile(@PathVariable("username") String username,
+                                       Authentication authentication) {
+        log.info("GET 사용자 프로필 요청");
+        return memberService.getProfile(username, authentication);
     }
 
 }

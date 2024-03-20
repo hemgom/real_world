@@ -52,4 +52,10 @@ public class MemberServiceImpl implements MemberService {
         return new ResponseMember(userInfo);
     }
 
+    @Override
+    public ResponseProfile getProfile(String username, Authentication authentication) {
+        ResponseProfile.ProfileInfo profileInfo = memberRepository.getProfile(username);
+        return memberRepository.checkFollow(authentication, profileInfo);
+    }
+
 }

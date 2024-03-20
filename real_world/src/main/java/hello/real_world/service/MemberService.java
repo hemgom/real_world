@@ -1,9 +1,6 @@
 package hello.real_world.service;
 
-import hello.real_world.dto.RequestAddMember;
-import hello.real_world.dto.RequestLogin;
-import hello.real_world.dto.RequestUpdateMember;
-import hello.real_world.dto.ResponseMember;
+import hello.real_world.dto.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.Authentication;
 
@@ -18,5 +15,8 @@ public interface MemberService {
 
     // 사용자 정보 수정
     ResponseMember updateMember(RequestUpdateMember request, String jwt, Authentication authentication);
+
+    // 사용자 프로필 조회
+    ResponseProfile getProfile(String username, Authentication authentication);
 
 }

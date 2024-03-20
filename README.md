@@ -157,4 +157,15 @@ commit message : `add followList in member filed`
 	- `@Convert`를 통해 테이블의 한 컬럼 내에서 N개의 값을 가지게 만듬
 		- `List -> String`으로 변환해 테이블에 저장 할 수 있게함
 - `FollowConverter` 추가
-	- DB에 저장시 `List -> String`으로, DB에서 값 조회시 `String -> List`로 전환하여 조회
+	- DB에 저장시 `List -> String`으로, DB에서 값 조회시 `String -> List`로 전환하여 조회  
+<br/>
+
+### 24.03.21
+commit message : `add get profile function`
+- 사용자 로그인 후 특정 사용자의 프로필 정보 반환 기능 추가
+	- `ResponseProfile`: 특정 사용자의 `profile 정보`를 전달하는 DTO
+	- `QueryMemberRepositoryImpl`
+		- `getProfile()`: 특정 사용자의 `username`을 통해 해당하는 사용자를 검색하고 그 정보를 `ResponseProfile.ProfileInfo`에 저장 후 반환
+		- `checkFollow()`: 인증객체를 통해 로그인한 사용자의 `email`을 통해 팔로우 목록을 조회하여 팔로우 상태를 `ProfileInfo`에 저장 후 `ResponseProfile`로 반환
+- 현재는 사용자의 팔로우 목록이 초기상태 그대로인 `Null`이기 때문에 팔로우 상태는 `false`만 확인 가능
+	- 추후 팔로우 등록/해제 기능을 추가하면서 확인할 예정

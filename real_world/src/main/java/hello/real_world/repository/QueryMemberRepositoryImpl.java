@@ -5,6 +5,7 @@ import hello.real_world.domain.member.Member;
 import hello.real_world.dto.RequestLogin;
 import hello.real_world.dto.RequestUpdateMember;
 import hello.real_world.dto.ResponseMember;
+import hello.real_world.dto.ResponseProfile;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -86,6 +87,47 @@ public class QueryMemberRepositoryImpl implements QueryMemberRepository {
                     .bio(findMember.getBio())
                     .image(findMember.getImage())
                     .build();
+        }
+
+        return null;
+    }
+
+    @Override
+    public ResponseProfile.ProfileInfo getProfile(String username) {
+        Member findMember = query
+                .select(member)
+                .from(member)
+                .where(member.username.eq(username))
+                .fetchOne();
+
+        if (findMember != null) {
+             return ResponseProfile.ProfileInfo.builder()
+                     .username(findMember.getUsername())
+                     .bio(findMember.getBio())
+                     .image(findMember.getImage())
+                     .build();
+        }
+
+        return null;
+    }
+
+    @Override
+    public ResponseProfile checkFollow(Authentication authentication,
+                                      ResponseProfile.ProfileInfo profileInfo) {
+        Member user = query
+                .select(member)
+                .from(member)
+                .where(member.email.eq(authentication.getName()))
+                .fetchOne();
+
+        if (user != null) {
+            if (user.getFollowList() == null || !user.getFollowList().contains(profileInfo.getUsername())) {
+                profileInfo.setFollowing("false");
+            } else {
+                profileInfo.setFollowing("true");
+            }
+
+            return new ResponseProfile(profileInfo);
         }
 
         return null;
