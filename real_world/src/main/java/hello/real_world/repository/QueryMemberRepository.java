@@ -23,4 +23,13 @@ public interface QueryMemberRepository {
 
     // 사용자 팔로우 여부 확인
     ResponseProfile checkFollow(Authentication authentication, ResponseProfile.ProfileInfo profileInfo);
+
+    // 사용자 팔로우 추가
+    Member addFollow(Authentication authentication, ResponseProfile.ProfileInfo profileInfo);
+
+    // 사용자 팔로우 제거
+    Member delFollow(Authentication authentication, ResponseProfile.ProfileInfo profileInfo);
+
+    // 사용자 팔로우 체크
+    ResponseProfile checkFollow(Member member, ResponseProfile.ProfileInfo profileInfo);
 }

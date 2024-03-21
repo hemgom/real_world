@@ -6,6 +6,7 @@ import hello.real_world.dto.RequestUpdateMember;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 // 사용자 정보
@@ -28,7 +29,8 @@ public class Member {
     private String image;               // 사용자 프로필 사진
 
     @Convert(converter = FollowConverter.class)
-    private List<String> followList;    // 사용자 팔로우 목록
+    @Builder.Default
+    private List<String> followList = new ArrayList<>();    // 사용자 팔로우 목록
 
     public static Member setMemberInfo(RequestAddMember.JoinInfo joinInfo) {
         return Member.builder()
@@ -60,6 +62,10 @@ public class Member {
             this.image = updateInfo.getImage();
         }
 
+    }
+
+    public void setFollowList(List<String> list) {
+        this.followList = list;
     }
 
 

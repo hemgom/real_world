@@ -31,7 +31,8 @@ public class SecurityConfig {
                                 .requestMatchers("/users").permitAll()                             // 사용자 등록 (권한 필요x)
                                 .requestMatchers("/users/login").permitAll()                       // 사용자 로그인 (권한 필요x)
                                 .requestMatchers("/user").hasAnyAuthority("USER")       // 사용자 정보 수정 (권한 필요)
-                                .requestMatchers("/profiles/{username}").hasAnyAuthority("USER")
+                                .requestMatchers("/profiles/{username}").permitAll()
+                                .requestMatchers("/profiles/{username}/follow").hasAnyAuthority("USER")
                                 .anyRequest().authenticated()                         // 그 밖의 요청에 대해서 인증이 필요
                 );
 

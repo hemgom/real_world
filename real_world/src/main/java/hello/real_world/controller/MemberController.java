@@ -2,7 +2,6 @@ package hello.real_world.controller;
 
 import hello.real_world.dto.*;
 import hello.real_world.service.MemberService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -41,6 +40,20 @@ public class MemberController {
                                        Authentication authentication) {
         log.info("GET 사용자 프로필 요청");
         return memberService.getProfile(username, authentication);
+    }
+
+    @PostMapping("/profiles/{username}/follow")
+    public ResponseProfile addFollow(@PathVariable("username") String username,
+                                     Authentication authentication) {
+        log.info("POST 해당 사용자 팔로우 추가");
+        return memberService.addFollow(username, authentication);
+    }
+
+    @DeleteMapping("/profiles/{username}/follow")
+    public ResponseProfile delFollow(@PathVariable("username") String username,
+                                     Authentication authentication) {
+        log.info("DELETE 해당 사용자 팔로우 해제");
+        return memberService.delFollow(username, authentication);
     }
 
 }

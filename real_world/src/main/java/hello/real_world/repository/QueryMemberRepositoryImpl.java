@@ -11,6 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static hello.real_world.domain.member.QMember.member;
 
 /**
@@ -121,7 +124,7 @@ public class QueryMemberRepositoryImpl implements QueryMemberRepository {
                 .fetchOne();
 
         if (user != null) {
-            if (user.getFollowList() == null || !user.getFollowList().contains(profileInfo.getUsername())) {
+            if (!user.getFollowList().contains(profileInfo.getUsername())) {
                 profileInfo.setFollowing("false");
             } else {
                 profileInfo.setFollowing("true");
@@ -131,6 +134,61 @@ public class QueryMemberRepositoryImpl implements QueryMemberRepository {
         }
 
         return null;
+    }
+
+    @Override
+    public Member addFollow(Authentication authentication,
+                                     ResponseProfile.ProfileInfo profileInfo) {
+
+        if (profileInfo == null) return null;
+
+        Member user = query
+                .select(member)
+                .from(member)
+                .where(member.email.eq(authentication.getName()))
+                .fetchOne();
+
+        if (user != null) {
+            if (!user.getFollowList().contains(profileInfo.getUsername())) {
+                user.getFollowList().add(profileInfo.getUsername());
+            }
+
+            return user;
+        }
+
+        return null;
+    }
+
+    @Override
+    public Member delFollow(Authentication authentication,
+                                     ResponseProfile.ProfileInfo profileInfo) {
+
+        if (profileInfo == null) return null;
+
+        Member user = query
+                .select(member)
+                .from(member)
+                .where(member.email.eq(authentication.getName()))
+                .fetchOne();
+
+        if (user != null) {
+            user.getFollowList().remove(profileInfo.getUsername());
+            return user;
+        }
+
+        return null;
+    }
+
+    @Override
+    public ResponseProfile checkFollow(Member member, ResponseProfile.ProfileInfo profileInfo) {
+
+        if (member.getFollowList().contains(profileInfo.getUsername())) {
+            profileInfo.setFollowing("true");
+        } else {
+            profileInfo.setFollowing("false");
+        }
+
+        return new ResponseProfile(profileInfo);
     }
 
 }

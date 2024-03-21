@@ -168,4 +168,19 @@ commit message : `add get profile function`
 		- `getProfile()`: 특정 사용자의 `username`을 통해 해당하는 사용자를 검색하고 그 정보를 `ResponseProfile.ProfileInfo`에 저장 후 반환
 		- `checkFollow()`: 인증객체를 통해 로그인한 사용자의 `email`을 통해 팔로우 목록을 조회하여 팔로우 상태를 `ProfileInfo`에 저장 후 `ResponseProfile`로 반환
 - 현재는 사용자의 팔로우 목록이 초기상태 그대로인 `Null`이기 때문에 팔로우 상태는 `false`만 확인 가능
-	- 추후 팔로우 등록/해제 기능을 추가하면서 확인할 예정
+	- 추후 팔로우 등록/해제 기능을 추가하면서 확인할 예정  
+<br/>
+
+### 24.03.22
+commit message : `add follow/unfollow function`
+- `Member`
+	- `List<String> followList` 초기 값 설정 : `new ArrayList<>()`
+	- `@Builder.Default`를 통해 엔티티 객체 생성시 해당 값을 초기화되어 저장됨
+- 팔로우 등록 과정
+	- `getProfile()`: 요청을 통해 얻은 타겟 사용자의 `username`을 통해 해당 사용자가 있는지 확인
+	- `addFollow()`: 타겟 사용자가 없다면 `null` 반환, 있다면 로그인한 사용자의 `followList`를 확인하고 타겟 사용자의 `username`을 리스트에 추가
+	- `save()`: 서비스에서 `followList`가 수정된 사용자의 정보를 DB에 업데이트
+	- `checkFollow()`: 타켓의 `username`과 로그인 사용자의 `followList`를 비교해 있다면 `"true"`, 없다면 `"false"`로 팔로우 상태를 저장 후 `ReponseProfile`에 담아 반환
+- 팔로우 해제 과정 : 다른 부분은 동일 `addFollow()` 부분에 아래의 과정 수행
+	- `delFollow()`: 타겟 사용자가 없다면 `null` 반환, 있다면 로그인한 사용자의 `followList`를 확인하고 타겟 사용자의 `username`을 리스트에서 제거
+- 현재 메서드들을 비교해보면 같은 기능을하는 `중복 구현`이 종종 보임 이러한 부분은 다시 리팩토링 할 필요성이 있음

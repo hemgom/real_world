@@ -19,4 +19,10 @@ public interface MemberService {
     // 사용자 프로필 조회
     ResponseProfile getProfile(String username, Authentication authentication);
 
+    // 사용자 팔로우 추가
+    ResponseProfile addFollow(String username, Authentication authentication);
+
+    // 사용자 팔로우 제거
+    ResponseProfile delFollow(String username, Authentication authentication);
+
 }

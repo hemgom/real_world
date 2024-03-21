@@ -58,4 +58,20 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.checkFollow(authentication, profileInfo);
     }
 
+    @Override
+    public ResponseProfile addFollow(String username, Authentication authentication) {
+        ResponseProfile.ProfileInfo findProfile = memberRepository.getProfile(username);
+        Member updateMember = memberRepository.addFollow(authentication, findProfile);
+        memberRepository.save(updateMember);
+        return memberRepository.checkFollow(updateMember, findProfile);
+    }
+
+    @Override
+    public ResponseProfile delFollow(String username, Authentication authentication) {
+        ResponseProfile.ProfileInfo findProfile = memberRepository.getProfile(username);
+        Member updateMember = memberRepository.delFollow(authentication, findProfile);
+        memberRepository.save(updateMember);
+        return memberRepository.checkFollow(updateMember, findProfile);
+    }
+
 }
