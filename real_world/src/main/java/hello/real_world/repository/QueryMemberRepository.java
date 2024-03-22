@@ -21,8 +21,8 @@ public interface QueryMemberRepository {
     // 사용자 프로필 조회
     ResponseProfile.ProfileInfo getProfile(String username);
 
-    // 사용자 팔로우 여부 확인
-    ResponseProfile checkFollow(Authentication authentication, ResponseProfile.ProfileInfo profileInfo);
+    // 사용자 팔로우 상태 얻기
+    ResponseProfile getFollowState(Authentication authentication, ResponseProfile.ProfileInfo profileInfo);
 
     // 사용자 팔로우 추가
     Member addFollow(Authentication authentication, ResponseProfile.ProfileInfo profileInfo);
@@ -30,6 +30,6 @@ public interface QueryMemberRepository {
     // 사용자 팔로우 제거
     Member delFollow(Authentication authentication, ResponseProfile.ProfileInfo profileInfo);
 
-    // 사용자 팔로우 체크
-    ResponseProfile checkFollow(Member member, ResponseProfile.ProfileInfo profileInfo);
+    // 사용자 팔로우 상태 확인
+    ResponseProfile checkFollowState(Member member, ResponseProfile.ProfileInfo profileInfo);
 }

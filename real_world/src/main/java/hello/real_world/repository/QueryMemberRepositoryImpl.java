@@ -11,9 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static hello.real_world.domain.member.QMember.member;
 
 /**
@@ -115,7 +112,7 @@ public class QueryMemberRepositoryImpl implements QueryMemberRepository {
     }
 
     @Override
-    public ResponseProfile checkFollow(Authentication authentication,
+    public ResponseProfile getFollowState(Authentication authentication,
                                       ResponseProfile.ProfileInfo profileInfo) {
         Member user = query
                 .select(member)
@@ -180,7 +177,7 @@ public class QueryMemberRepositoryImpl implements QueryMemberRepository {
     }
 
     @Override
-    public ResponseProfile checkFollow(Member member, ResponseProfile.ProfileInfo profileInfo) {
+    public ResponseProfile checkFollowState(Member member, ResponseProfile.ProfileInfo profileInfo) {
 
         if (member.getFollowList().contains(profileInfo.getUsername())) {
             profileInfo.setFollowing("true");

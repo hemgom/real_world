@@ -55,7 +55,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public ResponseProfile getProfile(String username, Authentication authentication) {
         ResponseProfile.ProfileInfo profileInfo = memberRepository.getProfile(username);
-        return memberRepository.checkFollow(authentication, profileInfo);
+        return memberRepository.getFollowState(authentication, profileInfo);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class MemberServiceImpl implements MemberService {
         ResponseProfile.ProfileInfo findProfile = memberRepository.getProfile(username);
         Member updateMember = memberRepository.addFollow(authentication, findProfile);
         memberRepository.save(updateMember);
-        return memberRepository.checkFollow(updateMember, findProfile);
+        return memberRepository.checkFollowState(updateMember, findProfile);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class MemberServiceImpl implements MemberService {
         ResponseProfile.ProfileInfo findProfile = memberRepository.getProfile(username);
         Member updateMember = memberRepository.delFollow(authentication, findProfile);
         memberRepository.save(updateMember);
-        return memberRepository.checkFollow(updateMember, findProfile);
+        return memberRepository.checkFollowState(updateMember, findProfile);
     }
 
 }

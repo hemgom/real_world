@@ -183,4 +183,12 @@ commit message : `add follow/unfollow function`
 	- `checkFollow()`: 타켓의 `username`과 로그인 사용자의 `followList`를 비교해 있다면 `"true"`, 없다면 `"false"`로 팔로우 상태를 저장 후 `ReponseProfile`에 담아 반환
 - 팔로우 해제 과정 : 다른 부분은 동일 `addFollow()` 부분에 아래의 과정 수행
 	- `delFollow()`: 타겟 사용자가 없다면 `null` 반환, 있다면 로그인한 사용자의 `followList`를 확인하고 타겟 사용자의 `username`을 리스트에서 제거
-- 현재 메서드들을 비교해보면 같은 기능을하는 `중복 구현`이 종종 보임 이러한 부분은 다시 리팩토링 할 필요성이 있음
+- 현재 메서드들을 비교해보면 같은 기능을하는 `중복 구현`이 종종 보임 이러한 부분은 다시 리팩토링 할 필요성이 있음  
+<br/>
+
+commit message : `edit method name`
+- 메서드 이름이 중복된걸 발견해서 중복된 기능을 하는 메서드가 존재하는 줄 알았음
+	- 하지만 의도한 바가 비슷해서 이름이 중복 됬을 뿐 `중복된 기능`이라 하기에는 애매한 부분이 있어 메소드 명을 바꿈
+- 변경 메서드 : `QueryMemberRepositoryImpl` 클래스	
+	- `checkFollow() -> getFollowState()`: 다른 사용자에 대한 로그인 사용자의 팔로우 상태를 반환
+	- `checkFollow() -> checkFollowState()`: 다른 사용자에 대한 팔로우 등록 OR 해제 후, 로그인 사용자의 팔로우 상태를 반환
