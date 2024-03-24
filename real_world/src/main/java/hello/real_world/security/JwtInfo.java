@@ -1,4 +1,4 @@
-package hello.real_world.dto;
+package hello.real_world.security;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

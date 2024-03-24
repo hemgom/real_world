@@ -1,7 +1,7 @@
-package hello.real_world.controller;
+package hello.real_world.domain.member.controller;
 
-import hello.real_world.dto.*;
-import hello.real_world.service.MemberService;
+import hello.real_world.domain.member.dto.*;
+import hello.real_world.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -37,7 +37,7 @@ public class MemberController {
 
     @GetMapping("/profiles/{username}")
     public ResponseProfile getProfile(@PathVariable("username") String username,
-                                       Authentication authentication) {
+                                      Authentication authentication) {
         log.info("GET 사용자 프로필 요청");
         return memberService.getProfile(username, authentication);
     }

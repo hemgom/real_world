@@ -1,6 +1,5 @@
 package hello.real_world.security;
 
-import hello.real_world.dto.JwtInfo;
 import org.springframework.security.core.Authentication;
 
 public interface JwtUtil {

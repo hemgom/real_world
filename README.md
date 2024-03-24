@@ -191,4 +191,24 @@ commit message : `edit method name`
 	- 하지만 의도한 바가 비슷해서 이름이 중복 됬을 뿐 `중복된 기능`이라 하기에는 애매한 부분이 있어 메소드 명을 바꿈
 - 변경 메서드 : `QueryMemberRepositoryImpl` 클래스	
 	- `checkFollow() -> getFollowState()`: 다른 사용자에 대한 로그인 사용자의 팔로우 상태를 반환
-	- `checkFollow() -> checkFollowState()`: 다른 사용자에 대한 팔로우 등록 OR 해제 후, 로그인 사용자의 팔로우 상태를 반환
+	- `checkFollow() -> checkFollowState()`: 다른 사용자에 대한 팔로우 등록 OR 해제 후, 로그인 사용자의 팔로우 상태를 반환  
+<br/>
+
+### 24.03.24
+commit message : `edit package location`
+- 패키지 위치 변경
+	- 추후 스펙 추가시 도메인 추가 예정
+	- 도메인 별로 구분해 패키지 루트만으로 구분하기 쉽게 하기 위함
+	- 전역으로 사용하는 패키지의 경우 `domain` 패키지와 같은 위치에 위치하도록 함
+		- ex) config, security 등
+- 패키지 구상도 (예상)
+```
+project-root
+└─ config
+└─ domain
+│	└─ each entity-naming-package
+│		└─ entity class
+│		└─ dto, controller, service, repository package
+└─ security
+└─ error
+```

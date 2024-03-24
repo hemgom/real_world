@@ -1,7 +1,6 @@
-package hello.real_world.service;
+package hello.real_world.domain.member.service;
 
-import hello.real_world.dto.*;
-import jakarta.servlet.http.HttpServletRequest;
+import hello.real_world.domain.member.dto.*;
 import org.springframework.security.core.Authentication;
 
 // 서비스 구현체 변경 고려 인터페이스로 작성

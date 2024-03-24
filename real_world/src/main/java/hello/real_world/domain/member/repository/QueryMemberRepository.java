@@ -1,10 +1,10 @@
-package hello.real_world.repository;
+package hello.real_world.domain.member.repository;
 
 import hello.real_world.domain.member.Member;
-import hello.real_world.dto.RequestLogin;
-import hello.real_world.dto.RequestUpdateMember;
-import hello.real_world.dto.ResponseMember;
-import hello.real_world.dto.ResponseProfile;
+import hello.real_world.domain.member.dto.RequestLogin;
+import hello.real_world.domain.member.dto.RequestUpdateMember;
+import hello.real_world.domain.member.dto.ResponseMember;
+import hello.real_world.domain.member.dto.ResponseProfile;
 import org.springframework.security.core.Authentication;
 
 public interface QueryMemberRepository {

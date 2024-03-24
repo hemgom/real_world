@@ -1,4 +1,4 @@
-package hello.real_world.dto;
+package hello.real_world.domain.member.dto;
 
 import lombok.*;
 

@@ -1,15 +1,14 @@
-package hello.real_world.service;
+package hello.real_world.domain.member.service;
 
 import hello.real_world.domain.member.Member;
-import hello.real_world.dto.*;
-import hello.real_world.repository.MemberRepository;
+import hello.real_world.domain.member.dto.*;
+import hello.real_world.domain.member.repository.MemberRepository;
+import hello.real_world.security.JwtInfo;
 import hello.real_world.security.JwtUtil;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 // 'MemberService' 구현체 클래스, 대부분 기능을 'repository' 에 위임
 @Slf4j

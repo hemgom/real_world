@@ -1,10 +1,8 @@
-package hello.real_world.repository;
+package hello.real_world.domain.member.repository;
 
 
 import hello.real_world.domain.member.Member;
-import hello.real_world.security.JwtUtil;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.security.authentication.AuthenticationManager;
 
 /**
  * DB 저장 : Spring Data JPA 사용
