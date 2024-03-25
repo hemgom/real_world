@@ -32,28 +32,32 @@ public class MemberController {
                                        @RequestHeader("Authorization") String jwt,
                                        Authentication authentication ) {
         log.info("PUT 사용자 정보 수정");
-        return memberService.updateMember(request, jwt, authentication);
+        String userEmail = authentication.getName();
+        return memberService.updateMember(request, jwt, userEmail);
     }
 
     @GetMapping("/profiles/{username}")
     public ResponseProfile getProfile(@PathVariable("username") String username,
                                       Authentication authentication) {
         log.info("GET 사용자 프로필 요청");
-        return memberService.getProfile(username, authentication);
+        String userEmail = authentication.getName();
+        return memberService.getProfile(username, userEmail);
     }
 
     @PostMapping("/profiles/{username}/follow")
     public ResponseProfile addFollow(@PathVariable("username") String username,
                                      Authentication authentication) {
         log.info("POST 해당 사용자 팔로우 추가");
-        return memberService.addFollow(username, authentication);
+        String userEmail = authentication.getName();
+        return memberService.addFollow(username, userEmail);
     }
 
     @DeleteMapping("/profiles/{username}/follow")
     public ResponseProfile delFollow(@PathVariable("username") String username,
                                      Authentication authentication) {
         log.info("DELETE 해당 사용자 팔로우 해제");
-        return memberService.delFollow(username, authentication);
+        String userEmail = authentication.getName();
+        return memberService.delFollow(username, userEmail);
     }
 
 }

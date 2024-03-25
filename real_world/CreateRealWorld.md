@@ -229,4 +229,60 @@ dependencies {
   - `Member`의 `List<String> followList`를 전환
     - `DB 저장`: `List -> String` 전환하여 저장, `FollowConverter.convertToDataBaseColumn()`
     - `정보 조회`: `String -> List` 전환하여 조회, `FollowConverter.convertToEntityAttribute()`
-  - 데이터 전환 메서드 구현에 `Stream`을 사용했으며 초기 `null`값에 대해선 해당 값을 반환하도록 함
+  - 데이터 전환 메서드 구현에 `Stream`을 사용했으며 초기 `null`값에 대해선 해당 값을 반환하도록 함  
+<br/><br/>
+
+## Optional<T> Class
+Null 값을 다루기 위해 등장한 클래스
+- `T 타입`의 객체를 포장해주는 `래퍼 클래스(Wrapper class)`, 모든 타입의 참조 변수를 저장 가능
+- 복잡한 조건문 없이도 해당 클래스에서 제공하는 메서드를 사용하면 간단하게 처리 가능
+- 물론 `null` 대신 초기값을 사용하는 것이 좋은 방법  
+<br/>
+
+### Optional 객체 생성
+1. `of()`
+   - 절대 `null` 값을 가지지 않는 데이터라면 해당 메서드로 객체 생성
+   - 만약 `null` 값을 저장하려 하면 `NullPointerException`이 발생
+```
+Optional<String> testData = Optional.of("test");
+// testData 가 절대로 null 이 아닐 거란 것도 명시적으로 확인 가능
+```
+2. `ofNullable()`
+   - `null` 값을 가질 수도 있는 데이터라면 해당 메서드로 객체 생성
+   - 데이터가 `null`이 아니라면 데이터 값을 가지는 객체를 반환
+   - 데이터가 `null`이라면 비어있는 객체를 반환
+```
+Optional<String> testData = Optional.ofNullable("test");
+// testData 가 null 값을 가질 수도 있단 것도 명시적으로 확인 가능
+```  
+3. `empty()`
+   - 객체를 `null` 값으로 초기화
+```
+Optional<String> testData = Optional.empty();
+
+System.out.println(testData.isPresent());   // false 출력
+```
+<br/>
+
+### Optional 객체 접근
+1. `get()`
+    - 단, 객체에 저장된 값이 `null`일 경우 `NullPointerException` 발생
+    - 따라서 `isPresent()`를 사용해 객체에 저장된 값이 `null`이 아닌지 확인 후 호출하는게 좋음
+      - `null` 값이면 `false`, 아니라면 `true`를 반환함
+```
+Optional<String> testData = Optional.ofNullable("test");
+
+if (testData.isPresent()) {...}
+```
+2. `orElse()` & `orElseGet()`
+   - `null` 값을 대체할 값을 지정하는 메서드
+       - `orElse()`: 파라미터로 값을 받음
+       - `orElseGet()`: 파라미터로 함수형 인터페이스를 받음
+   - 차이점 : 만약 파라미터로 메서드를 넣는다면?
+     - `orElse()`: 메서드의 반환 값을 지정 값으로 사용하기 위해 해당 메서드가 먼저 수행됨
+     - `orElseGet()`: 메서드 자체가 넘어가므로 객체가 `null` 값을 가지면 해당 메서드가 수행됨
+   - 결론
+     - `orElse()`: 파라미터로 값을 사용하고, 그 값이 미리 존재하는 경우 사용
+     - `orElseGet()`: 파라미터로 함수를 사용하고, 그 값이 미리 존재하지 않는 경우에 대부분 사용
+3. `orElseThrow()`
+   - 저장된 값이 존재하면 해당 값을 반환, `null`이라면 지정한 예외를 발생시킴

@@ -64,9 +64,4 @@ public class Member {
 
     }
 
-    public void setFollowList(List<String> list) {
-        this.followList = list;
-    }
-
-
 }

@@ -2,21 +2,19 @@ package hello.real_world.domain.member.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hello.real_world.domain.member.Member;
-import hello.real_world.domain.member.dto.RequestLogin;
 import hello.real_world.domain.member.dto.RequestUpdateMember;
 import hello.real_world.domain.member.dto.ResponseMember;
 import hello.real_world.domain.member.dto.ResponseProfile;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static hello.real_world.domain.member.QMember.member;
 
-/**
- * 엔티티에서 요청 정보와 같은 사용자를 검색
- * email 과 password 가 둘다 일치하면 해당 사용자의 정보를 반환
- */
 @Slf4j
 @Repository
 @RequiredArgsConstructor
@@ -24,168 +22,124 @@ public class QueryMemberRepositoryImpl implements QueryMemberRepository {
 
     private final JPAQueryFactory query;
 
+    /**
+     * 조회 기능 메서드 : email, password 를 통해 DB 에서 일치하는 member 를 조회
+     */
     @Override
-    public ResponseMember.UserInfo checkLoginInfo(RequestLogin request) {
-
-        RequestLogin.LoginInfo loginInfo = RequestLogin.LoginInfo.setLoginInfo(request);
-        log.info("로그인 정보 : email ={}, password = {}", loginInfo.getEmail(), loginInfo.getPassword());
-
-        Member findMember = query
-                .select(member)
-                .from(member)
-                .where(member.email.eq(loginInfo.getEmail()),
-                        member.password.eq(loginInfo.getPassword()))
-                .fetchOne();
-
-        if (findMember != null) {
-            return ResponseMember.UserInfo.builder()
-                    .email(findMember.getEmail())
-                    .username(findMember.getUsername())
-                    .bio(findMember.getBio())
-                    .image(findMember.getImage())
-                    .build();
-        }
-
-        return null;
+    public Member findByEmailAndPassword(String email, String password) {
+        return Optional.ofNullable(query
+                        .select(member)
+                        .from(member)
+                        .where(member.email.eq(email), member.password.eq(password))
+                        .fetchOne())
+                .orElseThrow(() -> new NoSuchElementException("입력한 정보와 일치하는 사용자가 없습니다."));
     }
 
+    /**
+     * 전달 기능 메서드 : 조회한 사용자의 정보를 DTO 타입으로 가져옴
+     */
     @Override
-    public Member updateMemberInfo(RequestUpdateMember request, Authentication authentication) {
+    public ResponseMember.UserInfo getFindMemberInfo(Member findMember) {
+        return ResponseMember.UserInfo.builder()
+                .email(findMember.getEmail())
+                .username(findMember.getUsername())
+                .bio(findMember.getBio())
+                .image(findMember.getImage())
+                .build();
+    }
 
-        RequestUpdateMember.UpdateInfo updateInfo = RequestUpdateMember.UpdateInfo.setUpdateInfo(request);
-        log.info("사용자 수정 정보 : email = {}", updateInfo.getEmail());
-        log.info("사용자 수정 정보 : username = {}", updateInfo.getUsername());
-        log.info("사용자 수정 정보 : password = {}", updateInfo.getPassword());
-        log.info("사용자 수정 정보 : bio = {}", updateInfo.getBio());
-        log.info("사용자 수정 정보 : image = {}", updateInfo.getImage());
+    /**
+     * 조회 기능 메서드 : email 을 통해 DB 에서 일치하는 member 를 조회
+     */
+    @Override
+    public Member findByEmail(String email) {
+        return Optional.ofNullable(query
+                        .select(member)
+                        .from(member)
+                        .where(member.email.eq(email))
+                        .fetchOne())
+                .orElseThrow(() -> new NoSuchElementException("인증 정보와 일치하는 사용자가 없습니다."));
+    }
 
-        Member findMember = query
-                .select(member)
-                .from(member)
-                .where(member.email.eq(authentication.getName()))
-                .fetchOne();
-
-        if (findMember != null) {
-            findMember.updateMemberInfo(updateInfo);
-        }
-
+    /**
+     * 수정 기능 메서드 : 요청받은 정보로 기존 사용자의 정보를 수정
+     */
+    @Override
+    public Member updateMemberInfo(RequestUpdateMember.UpdateInfo updateInfo, Member findMember) {
+        findMember.updateMemberInfo(updateInfo);
         return findMember;
     }
 
+    /**
+     * 전달 기능 메서드 : 수정한 사용자 정보를 DTO 타입으로 가져옴
+     */
     @Override
-    public ResponseMember.UserInfo findMemberById(Long id) {
-        Member findMember = query
-                .select(member)
-                .from(member)
-                .where(member.id.eq(id))
-                .fetchOne();
-
-        if (findMember != null) {
-            return ResponseMember.UserInfo.builder()
-                    .email(findMember.getEmail())
-                    .username(findMember.getUsername())
-                    .bio(findMember.getBio())
-                    .image(findMember.getImage())
-                    .build();
-        }
-
-        return null;
+    public ResponseMember.UserInfo getUpdatedMemberInfo(Member updateMember) {
+        return ResponseMember.UserInfo.builder()
+                .email(updateMember.getEmail())
+                .username(updateMember.getUsername())
+                .bio(updateMember.getBio())
+                .image(updateMember.getImage())
+                .build();
     }
 
+    /**
+     * 조회 기능 메서드 : username 을 통해 일치하는 member 를 조회
+     */
     @Override
-    public ResponseProfile.ProfileInfo getProfile(String username) {
-        Member findMember = query
-                .select(member)
-                .from(member)
-                .where(member.username.eq(username))
-                .fetchOne();
-
-        if (findMember != null) {
-             return ResponseProfile.ProfileInfo.builder()
-                     .username(findMember.getUsername())
-                     .bio(findMember.getBio())
-                     .image(findMember.getImage())
-                     .build();
-        }
-
-        return null;
+    public Member findByUsername(String username) {
+        return Optional.ofNullable(query
+                        .select(member)
+                        .from(member)
+                        .where(member.username.eq(username))
+                        .fetchOne())
+                .orElseThrow(() -> new NoSuchElementException("요청한 사용자를 찾을 수 없습니다."));
     }
 
+    /**
+     * 전달 기능 메서드 : 조회한 사용자의 정보를 DTO 타입으로 가져옴
+     */
     @Override
-    public ResponseProfile getFollowState(Authentication authentication,
-                                      ResponseProfile.ProfileInfo profileInfo) {
-        Member user = query
-                .select(member)
-                .from(member)
-                .where(member.email.eq(authentication.getName()))
-                .fetchOne();
-
-        if (user != null) {
-            if (!user.getFollowList().contains(profileInfo.getUsername())) {
-                profileInfo.setFollowing("false");
-            } else {
-                profileInfo.setFollowing("true");
-            }
-
-            return new ResponseProfile(profileInfo);
-        }
-
-        return null;
+    public ResponseProfile.ProfileInfo getMemberProfile(Member findMember) {
+        return ResponseProfile.ProfileInfo.builder()
+                .username(findMember.getUsername())
+                .bio(findMember.getBio())
+                .image(findMember.getImage())
+                .build();
     }
 
+    /**
+     * 조회 기능 메서드 : 조회한 사용자 팔로우 유무에 따라 특정 값으로 수정
+     */
     @Override
-    public Member addFollow(Authentication authentication,
-                                     ResponseProfile.ProfileInfo profileInfo) {
-
-        if (profileInfo == null) return null;
-
-        Member user = query
-                .select(member)
-                .from(member)
-                .where(member.email.eq(authentication.getName()))
-                .fetchOne();
-
-        if (user != null) {
-            if (!user.getFollowList().contains(profileInfo.getUsername())) {
-                user.getFollowList().add(profileInfo.getUsername());
-            }
-
-            return user;
-        }
-
-        return null;
-    }
-
-    @Override
-    public Member delFollow(Authentication authentication,
-                                     ResponseProfile.ProfileInfo profileInfo) {
-
-        if (profileInfo == null) return null;
-
-        Member user = query
-                .select(member)
-                .from(member)
-                .where(member.email.eq(authentication.getName()))
-                .fetchOne();
-
-        if (user != null) {
-            user.getFollowList().remove(profileInfo.getUsername());
-            return user;
-        }
-
-        return null;
-    }
-
-    @Override
-    public ResponseProfile checkFollowState(Member member, ResponseProfile.ProfileInfo profileInfo) {
-
-        if (member.getFollowList().contains(profileInfo.getUsername())) {
-            profileInfo.setFollowing("true");
+    public ResponseProfile.ProfileInfo setFollowState(ResponseProfile.ProfileInfo profile, List<String> followList) {
+        if (followList.contains(profile.getUsername())) {
+            profile.setFollowing("true");
         } else {
-            profileInfo.setFollowing("false");
+            profile.setFollowing("false");
         }
 
-        return new ResponseProfile(profileInfo);
+        return profile;
+    }
+
+    /**
+     * 수정 기능 메서드 : 조회한 사용자의 username 을 로그인 사용자의 followList 에 추가
+     */
+    @Override
+    public Member addFollow(Member loginMember, String username) {
+        if (!loginMember.getFollowList().contains(username)) {
+            loginMember.getFollowList().add(username);
+        }
+        return loginMember;
+    }
+
+    /**
+     * 수정 기능 메서드 : 조회한 사용자의 username 을 로그인 사용자의 followList 에서 제거
+     */
+    @Override
+    public Member delFollow(Member loginMember, String username) {
+        loginMember.getFollowList().remove(username);
+        return loginMember;
     }
 
 }
