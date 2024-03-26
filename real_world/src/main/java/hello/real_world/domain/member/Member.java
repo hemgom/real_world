@@ -1,6 +1,6 @@
 package hello.real_world.domain.member;
 
-import hello.real_world.Converter.FollowConverter;
+import hello.real_world.converter.FollowConverter;
 import hello.real_world.domain.member.dto.RequestAddMember;
 import hello.real_world.domain.member.dto.RequestUpdateMember;
 import jakarta.persistence.*;

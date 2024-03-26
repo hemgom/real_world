@@ -1,4 +1,4 @@
-package hello.real_world.Converter;
+package hello.real_world.converter;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;

@@ -226,4 +226,19 @@ commit message : `separate methods, narrow down parameters`
 	- 결과적으로 기존에 8개의 메서드가 10개로 늘어남
 		- 모든 메서드를 분리 하였음에도 `개수에 크게 차이가 나지 않음`
 		- 아마 메서드의 재사용으로 인해 `개수가 크게 늘지 않은 것`으로 예상됨
-	- 각각의 메서드는 `재사용하기 용이`해졌고 `유지보수 편의성이 높아`졌기 때문에 결과적으로는 더 좋은 상태가 됬다고 생각함
+	- 각각의 메서드는 `재사용하기 용이`해졌고 `유지보수 편의성이 높아`졌기 때문에 결과적으로는 더 좋은 상태가 됬다고 생각함  
+<br/>
+
+### 24.03.26
+commit message : `specify controller response value & global exception handling`
+- `@ResponseStatus`를 통한 `HTTP 응답`에 대한 `상태 코드` 설정
+- `@(Rest)ControllerAdvice & @ExceptionHandler`를 통한 전역적 예외 처리 추가
+	- 모든 `Controller`에서 클라이언트에게 일관성있는 예외 응답을 보내줄 수 있도록 `전역적`으로 예외를 처리하도록 함
+	- 추가적으로 `@Valid`를 사용해 요청 값에 대한 검증을 하도록 함
+	- `GlobalExceptionHandler`를 통해 처리하는 예외 종류
+		1. `@ExceptionHandler`를 통해 지정한 예외(들)
+			- ex) `ExceptionHandler(NoSuchElementException.class)`
+		2. `1)`에서 지정한 예외들 외에 대부분의 예외들
+			- `ExceptionHandler({Exception.class})`
+		3. `@Valid`를 통한 유효성 검증에 대한 예외
+			- `ResponseEntityExceptionHandler`의 `handleMethodArgumentNotValid()`

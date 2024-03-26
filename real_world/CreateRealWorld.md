@@ -89,10 +89,23 @@ private String follow = "이 문장을 초기화 값으로";
 - 가시적으로 설정파일 인지 또는 Bean 등록을 할지 알 수 있음  
 <br/>
 
-### @RestController-----------------------
+### @RestController
 `Bean`의 타입을 `RestController`로 설정
 - 해당 컨트롤러는 사용자 요청을 받아 `json 값`으로 응답을 주겠다고 명시함
 - `@Controller`와 다르게 리턴 값에 자동으로 `@ResponseBdoy`가 붙어 별도로 명시하지 않아도 됨  
+<br/>
+
+### @ResponseStatus
+`HTTP 상태 코드 지정`에 사용되는 애노테이션
+- Spring 에서 기본적으로 요청에 대한 응답이 성공적으로 이루어지면 `HTTP 200 (OK)` 응답을 제공
+- 해당 애노테이션을 사용하면 상황에 맞게 필요한 상태 코드를 지정 할 수 있음
+- 또한 오류를 알리고 싶다면 `reason` 을 통해 오류 메시지를 제공할 수 있음
+  - Spring 은 지정한 메서드가 성공적으로 완료 될 때만 `@ResponseStatus`를 사용하므로 적합하지 않아 보임
+  - 오류 메시지로 메시지를 알릴 뿐 따로 예외를 던지지 않음
+- 예외를 `HTTP 응답 상태`로 변환하기 위해서는 아래의 방법을 사용하도록 하자
+  - `@ExceptionHandler` 사용
+  - `@ControllerAdvice` 사용
+  - `Exception 클래스` 지정  
 <br/><br/>
 
 ## JPA
@@ -254,14 +267,14 @@ Optional<String> testData = Optional.of("test");
 ```
 Optional<String> testData = Optional.ofNullable("test");
 // testData 가 null 값을 가질 수도 있단 것도 명시적으로 확인 가능
-```  
+```
 3. `empty()`
    - 객체를 `null` 값으로 초기화
 ```
 Optional<String> testData = Optional.empty();
 
 System.out.println(testData.isPresent());   // false 출력
-```
+```  
 <br/>
 
 ### Optional 객체 접근
@@ -285,4 +298,71 @@ if (testData.isPresent()) {...}
      - `orElse()`: 파라미터로 값을 사용하고, 그 값이 미리 존재하는 경우 사용
      - `orElseGet()`: 파라미터로 함수를 사용하고, 그 값이 미리 존재하지 않는 경우에 대부분 사용
 3. `orElseThrow()`
-   - 저장된 값이 존재하면 해당 값을 반환, `null`이라면 지정한 예외를 발생시킴
+   - 저장된 값이 존재하면 해당 값을 반환, `null`이라면 지정한 예외를 발생시킴  
+<br/><br/>  
+
+## Spring 예외 처리 - 전역적 예외 처리
+아래의 두 `annotation`을 통해 `전역적`으로 예외를 처리 가능하다.
+### @ExceptionHandler
+`Spring`이 제공하고 유연하고 간단하게 예외처리를 할 수 있도록 도와줌
+- `@(Rest)Controller` 또는 `@(Rest)ControllerAdvice`에만 적용이 가능함 -> `@Service, @Repository` 적용 불가
+  - `@(Rest)Controller`에 적용한 경우: 해당 컨트롤러에만 적용됨
+  - `@(Rest)ControllerAdvice`에 적용한 경우: 모든 컨트롤러에 적용됨
+- 에러를 처리하고 예외는 `ExceptionHandlerExceptionResolver`에 의해 처리됨
+- `HttpServletRequest`, `WebRequest` 등을 얻을 수 있고 `ResponseEntity`, `String` 등 자유롭게 반환타입으로 사용 가능한 장점이 있음
+- 하지만 특정 컨트롤러에서만 발생하는 예외만 처리하기에 `에러 처리 코드 중복`, `단일 책임 원칙 위배(SRP)` 등의 문제가 발생 할 수 있음
+  - `@(Rest)ControllerAdvice`와 같이 사용해야 하는 이유
+- 2개 이상의 예외 클래스를 등록 가능함
+  - ex) `ExceptionHandler({ExampleException1.class, ExampleException2.class})`  
+<br/>
+
+### @ControllerAdvice & @RestControllerAdvice
+`Controller`, `RestController`가 명시된 컨트롤러에서 발생하는 예외들을 `AOP`를 적용, `전역적으로 처리`할 수 있는 `annotation`
+- 결국 해당 `annotation`이 붙은 클래스는 예외처리 전용 클래스가 됨
+- 여러 `Controller`에 대해 전역적으로 `ExceptionHandler`를 적용해줌
+  - `@Component`가 포함되어있어 적용된 클래스가 스프링 빈에 등록되기 때문이다.
+  - `@ExceptionHandler`를 해당 클래스의 메서드에 적용하면 단일로 사용할 때의 단점을 해결할 수 있음
+    - 모든 `Controller`에 적용되므로 코드 중복이나 단일 책임 원칙 위배 등이 해결
+- `직접 정의한 에러 응답`을 일관성 있게 클라이언트에게 할 수 있음
+- 별도로 `try-cathc`문을 사용하지 않아 코드 가독성이 높아짐
+- 주의! : 
+  - 한 프로젝트에 하나의 `ControllerAdvice`만 관리하는 것이 좋음
+    - 여러 `ControllerAdvice`가 필요한 경우 `basepackage`, `annotation` 등을 지정해야 함
+  - `직접 구현한 Exception 클래스`들은 한 공간에서 관리하도록 함  
+<br/><br/>
+
+## Spring Boot Validation
+클라이언트의 요청에 대한 `데이터 유효성 검증`을 할 수 있게 제공되는 기능
+### 처리과정
+1. 클라이언트가 요청에 대한 응답을 받기위해 필요한 데이터를 담아 서버에 요청
+2. 서버는 클라이언트의 요청에 담긴 데이터에 대한 `유효성 검증`을 수행
+    - 검증 성공 : 요청에 대한 로직 수행
+    - 검증 실패 : `MethodArgumentNotValidException` 발생
+3. 서버는 요청에 대한 응답 또는 발생한 에러에 대한 에러코드를 클라이언트에게 전달하게 됨  
+<br/>
+
+### 관련 annotation
+- `@Valid`: `@RequestBody`와 함께 사용되며 전달 받은 데이터에 대한 유효성 검증을 하기 위해 사용
+  - `Controller`에서 직접적으로 유효성 검증을 처리
+  - 검증 결과는 `BindingResult` 객체 담겨 반환
+  - `JSR-303` 표준 스펙, `Java`에서 제공
+  - 전달 받은 데이터가 다른 객체를 가지고 있을 경우
+    - 포함된 객체도 검증이 필요하다면 해당 객체 클래스에 적용하면 됨
+    - 추가로 `@Valid`를 지정해 `"여기도 검증 할게요!"`라 알리는 것과 같다.
+- `@Validated`: `@Valid`의 모든 기능 + 유효성 검증 그룹 지정
+  - `유효성 검증 그룹 지정`: 객체 필드에서 그룹을 지정해 `Controller` 메서드에서 해당 그룹만 유효성 검증 수행
+  - `Bean`으로 등록되어 있는 클래스에 적용해 검증을 수행
+  - 여러 검증 그룹을 사용 가능하며, 검증 결과는 `Errors` 객체에 담겨 반환
+  - 표준 스펙이 아님, `Spring Framework`에서 제공
+- `@NotNull`: `null`을 허용하지 않음
+  - 단, `""(빈 문자열)`, `" "(공백 문자)`은 허용됨
+- `@NotEmpty`: `null`과 `""`를 허용하지 않음
+  - 단, `" "`은 허용됨
+- `@NotBlank`: `null`과 `""`, `" "`를 허용하지 않음
+- `@Size(min = , max = )`: `최소/최대 값의 범위`를 벗어난 값은 허용하지 않음
+- `@Max`: `최대 값`의 범위를 벗어난 값은 허용하지 않음
+- `@Min`: `최소 값`의 범위를 벗어난 값은 허용하지 않음
+- `@Email`: 올바른 형식의 이메일 주소가 아닌 값은 허용하지 않음
+  - 유효한 이메일의 구성에 대한 기준 정립은 `Jakarta Bean Validation providers`가 수행
+  - `CharSequence`를 허용
+  - `null` 요소에 대해서는 `유효`하다고 간주

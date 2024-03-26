@@ -2,8 +2,10 @@ package hello.real_world.domain.member.controller;
 
 import hello.real_world.domain.member.dto.*;
 import hello.real_world.domain.member.service.MemberService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,18 +17,21 @@ public class MemberController {
     private final MemberService memberService;
 
     // 사용자 추가
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/users")
     public ResponseMember addMember(@RequestBody RequestAddMember request) {
         log.info("POST 사용자 등록 요청");
         return memberService.save(request);
     }
 
+    @ResponseStatus(HttpStatus.ACCEPTED)
     @PostMapping("/users/login")
-    public ResponseMember login(@RequestBody RequestLogin request) {
+    public ResponseMember login(@Valid @RequestBody RequestLogin request) {
         log.info("POST 로그인 요청");
         return memberService.userLogin(request);
     }
 
+    @ResponseStatus(HttpStatus.RESET_CONTENT)
     @PutMapping("/user")
     public ResponseMember updateMember(@RequestBody RequestUpdateMember request,
                                        @RequestHeader("Authorization") String jwt,
@@ -36,6 +41,7 @@ public class MemberController {
         return memberService.updateMember(request, jwt, userEmail);
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @GetMapping("/profiles/{username}")
     public ResponseProfile getProfile(@PathVariable("username") String username,
                                       Authentication authentication) {
@@ -44,6 +50,7 @@ public class MemberController {
         return memberService.getProfile(username, userEmail);
     }
 
+    @ResponseStatus(HttpStatus.RESET_CONTENT)
     @PostMapping("/profiles/{username}/follow")
     public ResponseProfile addFollow(@PathVariable("username") String username,
                                      Authentication authentication) {
@@ -52,6 +59,7 @@ public class MemberController {
         return memberService.addFollow(username, userEmail);
     }
 
+    @ResponseStatus(HttpStatus.RESET_CONTENT)
     @DeleteMapping("/profiles/{username}/follow")
     public ResponseProfile delFollow(@PathVariable("username") String username,
                                      Authentication authentication) {
