@@ -241,4 +241,12 @@ commit message : `specify controller response value & global exception handling`
 		2. `1)`에서 지정한 예외들 외에 대부분의 예외들
 			- `ExceptionHandler({Exception.class})`
 		3. `@Valid`를 통한 유효성 검증에 대한 예외
-			- `ResponseEntityExceptionHandler`의 `handleMethodArgumentNotValid()`
+			- `ResponseEntityExceptionHandler`의 `handleMethodArgumentNotValid()`  
+<br/>
+
+### 24.03.27
+commit message : `add study info in 'CreateRealWorld.md'`
+- 누락 학습 정보 추가
+	- `@NonNull`, `@JsonInclude`
+- DB 학습 정보 추가
+	- `DB basic knowledge` 항목으로 추가 함
