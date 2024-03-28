@@ -6,7 +6,7 @@
 - version : `3.2.3`
 - Package name : `hello.real_world`
 - Packaging : `Jar`
-- Dependencies : `Spring Web` `Thymeleaf` `Lombok` `JPA` `H2 DB` `Querydsl`  
+- Dependencies : `Spring Web`, `Thymeleaf`, `Lombok`, `JPA`, `Validation`, `H2 DB`, `Querydsl`, `Security`, `JWT`  
 <br/><br/>
 
 ## Work Log
@@ -249,4 +249,16 @@ commit message : `add study info in 'CreateRealWorld.md'`
 - 누락 학습 정보 추가
 	- `@NonNull`, `@JsonInclude`
 - DB 학습 정보 추가
-	- `DB basic knowledge` 항목으로 추가 함
+	- `DB basic knowledge` 항목으로 추가 함  
+
+<br/>
+
+### 24.03.28
+commit message : `add 'mdFiles' package & add DB ERD`
+- MD 파일 전용 패키지 생성
+	- `MD 파일` 개수가 늘어날 것 같아 파일들을 담아두는 패키지 생성
+	- `CreateRealWorld.md -> LearningToApply.md`로 파일명 변경
+	- `md 파일`에 사용 할 이미지를 저장하는 `imageFiles` 패키지 추가
+- DB ERD 작성
+	- 작성한 ERD(PNG 파일)를 `DataBaseERD.md`에 첨부
+	- 해당 ERD에 작성된 엔티티와 해당 필드에 대한 명세를 적어둠

@@ -1,11 +1,11 @@
-# 개발 노트
-## 도메인
+# 개발에 적용하기 위해 학습한 내용 정리
+## Domain
 도메인(domain) = 시스템이 구현해야하는 `핵심 비즈니스 업무 영역`
 - 향후 다른 기술을 사용해도 `domain`은 그대로 유지할 수 있도록 해야 함
 - 즉, 기술은 `domain`을 의존하고 `domain`은 기술에 의존하지 않도록 설계해야 함  
 <br/><br/>
 
-## lombok
+## Lombok
 ### @Data
 `종합 선물 세트(@Getter, @Setter, @ToString, @EqualsAndHashCode, @RequiredArgsConstructor)`
 - `POJO(Plain Old Java Objects)` & `bean` 과 관련된 모든 `재사용 가능 코드(boilerplate)`를 생성
@@ -61,7 +61,7 @@ private String follow = "이 문장을 초기화 값으로";
   - 필드의 경우 : 지정한 멤버 변수를 포함한 모든 생성자에 대해서 `null 검사`를 삽입하고 검증을 수행  
 <br/><br/>
 
-## annotation
+## Annotation
 ### @NotEmpty
 `null`과 `""(빈 문자열)`를  둘 다 허용하지 않음
 - 단, `" "(공백 문자열)`은 허용
@@ -212,7 +212,7 @@ dependencies {
 - `Authorization`: 누가 무엇을 할 수 있는지 결정하는 규칙  
 <br/><br/>
 
-## Spring Boot Security + JWT 동작 원리
+## Spring Boot Security + JWT 동작
 1. `클라이언트 -> 서버`: ID/PW 정보로 로그인 요청
 2. `클라이언트 <- 서버`: 로그인 정보 검증 후 `AccessToken + RefreshToken`을 발급
 3. `클라이언트 -> 서버`: 요청 헤더에 발급 받은 `AccessToken`을 포함해 API 요청
