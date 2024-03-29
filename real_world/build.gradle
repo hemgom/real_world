@@ -39,7 +39,11 @@ dependencies {
 	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
 	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
-	runtimeOnly 'com.h2database:h2'		// h2 추가
+	// h2 DB 추가
+	//runtimeOnly 'com.h2database:h2'
+
+	// MySQL 추가
+	runtimeOnly 'com.mysql:mysql-connector-j'
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'

@@ -543,4 +543,97 @@ DB 를 학습하기 위해 기본적으로 알고가야 할 내용에 대해 학
 - `커밋`에 대해 엄격한 정책을 사용하여 매우 세분화된 수준에서 `비즈니스 규칙 및 정책`을 처리
   - 모든 부분에서 커밋할 수 있는 상태가 아니라면 해당 작업에 대한 커밋을 수행하지 않음
 - `원자성`: 다각적 커밋 기능
-  - 데이터베이스에서 데이터를 정확하게 유지, 비즈니스 규칙/규정 및 정책을 준수하도록 보장하기 위한 핵심 개념
+  - 데이터베이스에서 데이터를 정확하게 유지, 비즈니스 규칙/규정 및 정책을 준수하도록 보장하기 위한 핵심 개념  
+<br/><br/>
+
+## MySQL 적용까지
+### 설치
+[MySQL - Download Link](https://dev.mysql.com/downloads/installer/)
+- 위 사이트에 접속 후 두 개의 `Windows (x86, 32-bit), MSI Installer` 중 아래의 `mysql-installer-community-{버전}.msj)`를 다운로드 해준다.
+- 다운로드가 완료되면 해당 파일을 실행하고 아래의 내용에 맞춰 설치 하였다.
+  - `Select products and Features` 항목에서 다운로드 할 것을 선택하는데 `DB 학습` 목적에 맞춰 3개의 항목만 다운로드 해줬다.
+    1. `MySQL Server 8.0.36`
+    2. `MySQL Workbench 8.0.36`
+    3. `Samplse and Examples 8.0.36`: 테스트용 데이터를 넣어 볼 수 있는 `샘플 데이터`
+  - `Port 3306`: MySQL 기본 포트로 어떤 값으로 설정 해두었는지 기억 할 필요가 있음
+  - `MySQL root Password`: 기억하기 쉬운 패스워드로 설정해두자, 잊어버리면 상당히 곤란함
+  - `Windows Service Name`: 기본적으로 `MySQL80`으로 설정되어있던 것을 식별하기 편하게 `MySQL`로 설정  
+<br/>
+
+### MySQL 접속 (cmd)
+`cmd`로 MySQL 서버에 접속하기에 앞서 설정해둘 것이 있다.
+#### 0. PC 환경변수 설정
+`내 PC` 마우스 우클릭 → `속성(R)` → `고급 시스템 설정` → 고급 탭의 `환경 변수` → 시스템 변수의 `Path 클릭 후 편집`
+- `C:\Program Files\MySQL\MySQL Server 8.0\bin`를 추가 후 적용
+- 이 설정을 하기 전에는 `cmd`에 `mysql -u root -p`를 입력했더니 해당 명령문을 실행 할 수 없었음
+- 위의 설정을 해준다면 해당 명령문이 수행되며 `MySQL` 서버에 접속이 가능함
+#### 1. MySQL 서버 접속
+`cmd` 실행 후 아래의 명령어 순차적 수행
+```
+cd C:\Uesrs\{User}      // {User} : PC 사용자명을 입력
+
+mysql -u root -p        // 서버 접속방식 중 하나로 접속 계정명은 `root`, 패스워드를 사용한다는 걸 명시
+{password}              // 위 명령어 수행후 비밀번호를 입력하라고 하는데 설치때 설정한 `root`의 비밀번호를 입력
+                        // 만약 로그인이 성공하면 접속되며, 위치가 `mysql>`로 변경된다
+```  
+<br/>
+
+### DB 생성 및 조회 (cmd)
+```
+mysql> create database {DB 이름};    // 원하는 DB 명을 지정해 DB 를 생성
+
+mysql> show databases;              // 생성한 DB 목록을 보여줌
+```
+> 해당 부분은 `MySQL Workbench`를 통해서도 다룰 수 있다.
+
+<br/>
+
+### Spring Boot Setting
+#### Dependencies
+```
+dependencies {
+    runtimeOnly 'com.mysql:mysql-connector-j'
+}
+```
+> `JPA`의 경우 이미 적용이 되어있었기 때문에 `MySQL`에 대한 의존성만 추가<br/>
+> 의존성 추가에 대한 부분은 [이 곳](https://docs.spring.io/spring-boot/docs/current/reference/html/dependency-versions.html#appendix.dependency-versions)을 참고 하였다.
+
+#### application.yml
+```
+spring:
+  # MySQL Database 설정
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # MySQL DB 연결 주소
+    # URL 작성 예시 - mysql://{DB URL}:{PORT}/{DB NAME}?serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/real_world
+    username: manager               # DB username
+    password: {user password}       # DB user password
+
+  # JPA 설정
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: create    # DB 초기화 전략 [none, create, create-drop, update, validate]
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+```
+> 기존의 `h2 DB`를 사용하던 `yml`파일을 `MySQL`로만 바꾸어 수정하였다.<br/>
+> 
+> 작성 중 가장 난해했던 부분이 있었는데 바로 `DB user`에 대한 설정이었다.<br/>
+> 기존 생성해둔 `root`를 사용하고자 했는데 계속 `Access denied for user 'root'@'localhost' (using password: YES)`라는 메시지와 함께 `SQLException`이 발생했다.
+> 확인 결과, `MySQL - administration`에서 사용자 정보를 확인해보니 `root`에 원하는 `password`를 제대로 입력하지 않은 것이 원인이었다.
+> 이후 새로운 `manager` 사용자를 추가, 추가 시 설정한 `password`를 `application.yml`에 적용하니 정상적으로 `MySQL`과 연결되었다.
+
+<br/>
+
+### DB table 생성 확인
+`MySQL`과 연결도 확인했으니 `회원 등록` 요청시 엔티티 생성과 데이터 값이 제대로 저장되는지 확인  
+<br/>
+![MySQL_test_result](imgeFiles/MySQL_test_result.png)
+- 요청에 대한 응답 값도 정상
+- `MySQL DB`의 `table` 및 `column` 생성도 정상
+- `회원 등록`에 대한 요청이므로 요청 받은 `회원 정보`가 `DB 에 저장`되는 것도 확인

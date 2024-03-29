@@ -1,23 +1,17 @@
-# 내장 톰캣 포트 번호 설정
-server:
-  port: 82
-
 spring:
-  # H2 Database 설정
+  # MySQL Database 설정
   datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:tcp://localhost/~/test   # H2 DB 연결 주소(Embedded address)
-    username: sa                          # H2 DB 접속 ID(사용자 지정)
-
-  # H2 Console 설정
-  h2:
-    console:
-      enabled: true       # H2 Console 사용 여부
-      path: /h2-console   # H2 Console 접속 주소
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # MySQL DB 연결 주소
+    # mysql://[DB URL]:[PORT]/[DB NAME]?serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/real_world
+    username: manager   # DB username
+    password: 8207      # DB user password
 
   # JPA 설정
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       ddl-auto: create    # DB 초기화 전략 [none, create, create-drop, update, validate]
     properties:

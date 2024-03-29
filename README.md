@@ -261,4 +261,10 @@ commit message : `add 'mdFiles' package & add DB ERD`
 	- `md 파일`에 사용 할 이미지를 저장하는 `imageFiles` 패키지 추가
 - DB ERD 작성
 	- 작성한 ERD(PNG 파일)를 `DataBaseERD.md`에 첨부
-	- 해당 ERD에 작성된 엔티티와 해당 필드에 대한 명세를 적어둠
+	- 해당 ERD에 작성된 엔티티와 해당 필드에 대한 명세를 적어둠  
+<br/>
+
+### 24.03.29
+commit message : `change h2 to MySQL`
+- `DB 변경`: `h2 DB -> MySQL DB`
+	- 변경 이후 기존 코드들이 잘 돌아가는지 확인 완료
