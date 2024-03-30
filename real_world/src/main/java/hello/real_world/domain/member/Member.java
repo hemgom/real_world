@@ -1,13 +1,12 @@
 package hello.real_world.domain.member;
 
-import hello.real_world.converter.FollowConverter;
 import hello.real_world.domain.member.dto.RequestAddMember;
 import hello.real_world.domain.member.dto.RequestUpdateMember;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 // 사용자 정보
 @Getter
@@ -27,10 +26,6 @@ public class Member {
 
     private String bio;                 // 사용자 소개
     private String image;               // 사용자 프로필 사진
-
-    @Convert(converter = FollowConverter.class)
-    @Builder.Default
-    private List<String> followList = new ArrayList<>();    // 사용자 팔로우 목록
 
     public static Member setMemberInfo(RequestAddMember.JoinInfo joinInfo) {
         return Member.builder()

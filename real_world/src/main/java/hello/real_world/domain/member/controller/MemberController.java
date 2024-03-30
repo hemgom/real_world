@@ -50,7 +50,7 @@ public class MemberController {
         return memberService.getProfile(username, userEmail);
     }
 
-    @ResponseStatus(HttpStatus.RESET_CONTENT)
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/profiles/{username}/follow")
     public ResponseProfile addFollow(@PathVariable("username") String username,
                                      Authentication authentication) {
@@ -59,7 +59,7 @@ public class MemberController {
         return memberService.addFollow(username, userEmail);
     }
 
-    @ResponseStatus(HttpStatus.RESET_CONTENT)
+    @ResponseStatus(HttpStatus.CREATED)
     @DeleteMapping("/profiles/{username}/follow")
     public ResponseProfile delFollow(@PathVariable("username") String username,
                                      Authentication authentication) {

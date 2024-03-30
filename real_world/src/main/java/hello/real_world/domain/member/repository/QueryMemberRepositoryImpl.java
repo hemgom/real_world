@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -106,40 +105,6 @@ public class QueryMemberRepositoryImpl implements QueryMemberRepository {
                 .bio(findMember.getBio())
                 .image(findMember.getImage())
                 .build();
-    }
-
-    /**
-     * 조회 기능 메서드 : 조회한 사용자 팔로우 유무에 따라 특정 값으로 수정
-     */
-    @Override
-    public ResponseProfile.ProfileInfo setFollowState(ResponseProfile.ProfileInfo profile, List<String> followList) {
-        if (followList.contains(profile.getUsername())) {
-            profile.setFollowing("true");
-        } else {
-            profile.setFollowing("false");
-        }
-
-        return profile;
-    }
-
-    /**
-     * 수정 기능 메서드 : 조회한 사용자의 username 을 로그인 사용자의 followList 에 추가
-     */
-    @Override
-    public Member addFollow(Member loginMember, String username) {
-        if (!loginMember.getFollowList().contains(username)) {
-            loginMember.getFollowList().add(username);
-        }
-        return loginMember;
-    }
-
-    /**
-     * 수정 기능 메서드 : 조회한 사용자의 username 을 로그인 사용자의 followList 에서 제거
-     */
-    @Override
-    public Member delFollow(Member loginMember, String username) {
-        loginMember.getFollowList().remove(username);
-        return loginMember;
     }
 
 }

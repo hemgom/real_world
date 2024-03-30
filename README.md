@@ -267,4 +267,26 @@ commit message : `add 'mdFiles' package & add DB ERD`
 ### 24.03.29
 commit message : `change h2 to MySQL`
 - `DB 변경`: `h2 DB -> MySQL DB`
-	- 변경 이후 기존 코드들이 잘 돌아가는지 확인 완료
+	- 변경 이후 기존 코드들이 잘 돌아가는지 확인 완료  
+<br/>
+
+### 24.03.30
+commit message : `edit follow system`
+- `DB ERD`에 맞춰 `follow` 기능에 대한 수정
+	- 기존 코드는 `Converter`를 사용해 `Member` 엔티티에 저장 되어있는 `followList`를 사용해 팔로우 기능을 구현했다.
+	- 하지만 이는 애플리케이션 성능을 낮출 수 있는 방법이기에 다른 방법들 중 하나인 `OneToMany` 방식을 사용하려했다.
+- 수정 부분 정리
+	- 더 이상 사용하지 않을 `Converter`를 제거, 물론 `Member` 객체에 있는 `followList`도 제거
+	- 팔로잉 정보와 팔로워 정보를 저장 할 엔티티를 각각 생성
+		- `팔로잉 엔티티`: `hello.real_world.domain.followers.Following`
+		- `팔로워 엔티티`: `hello.real_world.domain.followers.Followers`
+	- 팔로잉/팔로워 정보를 조회 및 저장, 삭제 기능을 수행할 `repository`와 `interface`도 각각 생성
+		- `Following(Followers)Repository`: 인터페이스로 `JPARepository`와 `QueryFollowing(QueryFollowers)Repository` 인터페이스를 상속
+		- `QueryFollowing(QueryFollowers)Repository`: 각각의 엔티티에서 사용 할 인터페이스
+		- `QueryFollowing(QueryFollowers)RepositoryImpl`: 위의 인터페이스를 각각 구현한 클래스, `JPAQueryFactory`를 주입
+	- `MemberService`는 `Following(Followers)Repository` 인터페이스를 각각 주입
+		- 따로 `service`를 추가하지 않은 이유는 `Following(Followers` 엔티티는 `Member`의 `id`를 `FK`로 사용
+		- 직접적으로 이를 다루는 건 `Member`를 통해 다루기 때문에 `service`는 따로 추가하지 않음
+	- `Following/Followers` 객체에 `@ManyToOne`을 사용해 연관관계 생성
+		- 추가적으로 `@JoinColumn`을 사용해 해당 필드를 `FK` 칼럼으로 정의
+- 적용 결과 : 기존에 작동하던 `Profile 조회`, `Follow 등록`, `Follow 해제` 기능 모두 정상 작동
