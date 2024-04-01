@@ -267,6 +267,7 @@ commit message : `add 'mdFiles' package & add DB ERD`
 ### 24.03.29
 commit message : `change h2 to MySQL`
 - `DB 변경`: `h2 DB -> MySQL DB`
+	- `application.yml` 수정
 	- 변경 이후 기존 코드들이 잘 돌아가는지 확인 완료  
 <br/>
 
@@ -289,4 +290,14 @@ commit message : `edit follow system`
 		- 직접적으로 이를 다루는 건 `Member`를 통해 다루기 때문에 `service`는 따로 추가하지 않음
 	- `Following/Followers` 객체에 `@ManyToOne`을 사용해 연관관계 생성
 		- 추가적으로 `@JoinColumn`을 사용해 해당 필드를 `FK` 칼럼으로 정의
-- 적용 결과 : 기존에 작동하던 `Profile 조회`, `Follow 등록`, `Follow 해제` 기능 모두 정상 작동
+- 적용 결과 : 기존에 작동하던 `Profile 조회`, `Follow 등록`, `Follow 해제` 기능 모두 정상 작동  
+<br/>
+
+### 24.04.01
+commit message : `edit GlobalExceptionHandler & setting IntelliJ`
+- `GlobalExceptionHandler` 수정
+	- `@Valid` 검증에 대한 예외 부분 수정
+	- `ResponseEntityExceptionHandler`의 메서드를 오버라이딩해서 사용하지 않고 `@ExceptionHnadler`로 `MethodArgumentNotValidException` 예외를 처리
+	- 해당 코드가 다른 코드와 유사해 좀 더 일관성 있어보여 수정하게 됨
+- `DB 정보`를 `IntelliJ`로 불러오기 (연동)
+	- `IntelliJ`에서도 `DB 정보(= 속성 이름 등)`에 대해 알 수 있도록 해당 정보를 가져오는 작업 수행

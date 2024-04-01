@@ -4,17 +4,12 @@ import hello.real_world.exception.CommonErrorCode;
 import hello.real_world.exception.CustomException;
 import hello.real_world.exception.ErrorCode;
 import hello.real_world.exception.dto.ResponseError;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -27,7 +22,7 @@ import java.util.stream.Collectors;
  */
 @RestControllerAdvice
 @Slf4j
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+public class GlobalExceptionHandler {
 
     // RuntimeException 처리
     @ExceptionHandler(CustomException.class)
@@ -86,16 +81,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     /**
-     * 상속받은 `ResponseEntityExceptionHandler`의 메서드
-     * 해당 메서드를 오버라이딩해 `@Valid`를 통해 검증 진행시 발생하는 예외를 처리
-     * `MethodArgumentNotValidException`: 개발자가 정의한 `Validation`을 요청에서 어기면 발생하는 예외
+     * `@Valid` 검증 시 발생하는 예외 = MethodArgumentNotValidException
+     * 해당 예외 처리 메서드
      */
-    @Override
-    public ResponseEntity<Object> handleMethodArgumentNotValid(
-            @NonNull MethodArgumentNotValidException e,
-            @NonNull HttpHeaders headers,
-            @NonNull HttpStatusCode status,
-            @NonNull WebRequest request) {
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e) {
         log.warn("handleValidError: ", e);
         ErrorCode errorCode = CommonErrorCode.INVALID_PARAMETER;
         return handleExceptionInternal(e, errorCode);

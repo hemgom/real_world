@@ -19,7 +19,7 @@ public class Followers {
     private String followerName;    // 팔로우 신청 이름
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "member_id")
     private Member memberId;    // 팔로우 대상 id, Member PK 를 참조하는 FK
 
 }

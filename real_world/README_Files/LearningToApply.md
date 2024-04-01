@@ -560,6 +560,11 @@ DB 를 학습하기 위해 기본적으로 알고가야 할 내용에 대해 학
   - `Windows Service Name`: 기본적으로 `MySQL80`으로 설정되어있던 것을 식별하기 편하게 `MySQL`로 설정  
 <br/>
 
+### MySQL 서버 실행
+`Window 키` → `서비스` → `MySQL` 항목 우클릭 → `시작`
+- 해당 부분은 `MySQL` 설정 시 `윈도우 시작 시 자동 실행 기능`을 꺼놨기 때문에 작성함  
+<br/>
+
 ### MySQL 접속 (cmd)
 `cmd`로 MySQL 서버에 접속하기에 앞서 설정해둘 것이 있다.
 #### 0. PC 환경변수 설정
@@ -637,6 +642,18 @@ spring:
 - 요청에 대한 응답 값도 정상
 - `MySQL DB`의 `table` 및 `column` 생성도 정상
 - `회원 등록`에 대한 요청이므로 요청 받은 `회원 정보`가 `DB 에 저장`되는 것도 확인  
+<br/>
+
+### DB table 정보 IntelliJ 연동
+`@Column`을 사용해 테이블의 속성 이름을 지정 할 때 필요함
+- 설정하지 않으면 `IntelliJ`는 DB에 대해서 모르기에 해당 값에 대한 적용/오류에 대해 알려줄 수 없음
+#### 적용 방법
+![DB info to IntelliJ](imgeFiles/DB_info_to_IntelliJ.png)
+- 인텔리제이 우측 메뉴 `Database` 클릭
+- 상단 `+(New)` → Data Source → `MySQL`
+- `User 와 Password`에 `DB` 접속에 사용하는 `사용자명과 패스워드 입력 (application.yml 기준)`
+- `Database`에 가져올 `DB` 지정
+- 이미지 처럼 추가한 `DB`가 노출되면 완료  
 <br/><br/>
 
 ## 엔티티 연관관계
