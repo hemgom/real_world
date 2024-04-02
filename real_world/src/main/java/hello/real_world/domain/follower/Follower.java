@@ -1,4 +1,4 @@
-package hello.real_world.domain.followers;
+package hello.real_world.domain.follower;
 
 import hello.real_world.domain.member.Member;
 import jakarta.persistence.*;
@@ -10,7 +10,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Followers {
+public class Follower {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,8 +18,8 @@ public class Followers {
 
     private String followerName;    // 팔로우 신청 이름
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Member memberId;    // 팔로우 대상 id, Member PK 를 참조하는 FK
+    private Member member;    // 팔로우 대상 id, Member PK 를 참조하는 FK
 
 }

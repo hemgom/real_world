@@ -1,9 +1,9 @@
 package hello.real_world.domain.member.service;
 
-import hello.real_world.domain.followers.repository.FollowersRepository;
-import hello.real_world.domain.following.repository.FollowingRepository;
-import hello.real_world.domain.followers.Followers;
+import hello.real_world.domain.follower.Follower;
+import hello.real_world.domain.follower.repository.FollowerRepository;
 import hello.real_world.domain.following.Following;
+import hello.real_world.domain.following.repository.FollowingRepository;
 import hello.real_world.domain.member.Member;
 import hello.real_world.domain.member.dto.*;
 import hello.real_world.domain.member.repository.MemberRepository;
@@ -22,7 +22,7 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;        // 사용자 등록, 수정, 조회
     private final JwtUtil jwtUtil;                          // JWT 발급, 재발급, 인증
     private final FollowingRepository followingRepository;  // 사용자 팔로잉 정보 등록, 조회
-    private final FollowersRepository followersRepository;  // 사용자 팔로워 정보 등록, 조회
+    private final FollowerRepository followersRepository;  // 사용자 팔로워 정보 등록, 조회
 
     @Override
     public ResponseMember save(RequestAddMember request) {
@@ -74,13 +74,27 @@ public class MemberServiceImpl implements MemberService {
         Member findMember = memberRepository.findByUsername(username);
         ResponseProfile.ProfileInfo profile = memberRepository.getMemberProfile(findMember);
         log.info("----------------------------------------------------------------");
-        log.info("조회한 사용자 정보로 Profile 생성");
+        log.info("프로필 대상 유무 확인 및 프로필 생성");
 
         Member loginMember = memberRepository.findByEmail(userEmail);
-        Following checkFollowing = followingRepository.findByFollowerIdAndUsername(loginMember, username);
-        log.info("로그인한 사용자 정보 조회 및 팔로우 정보 확인");
+        log.info("로그인한 사용자 정보 조회");
 
-        return new ResponseProfile(followingRepository.setFollowState(profile,checkFollowing));
+        profile.setFollowing(memberRepository.checkResult(loginMember, username));
+        log.info("팔로우 정보 세팅");
+
+        return new ResponseProfile(profile);
+    }
+
+    public ResponseProfile getProfileNotAuth(String username) {
+        Member findMember = memberRepository.findByUsername(username);
+        ResponseProfile.ProfileInfo profile = memberRepository.getMemberProfile(findMember);
+        log.info("----------------------------------------------------------------");
+        log.info("프로필 대상 유무 확인 및 프로필 생성");
+
+        profile.setFollowing("false");
+        log.info("팔로우 정보 세팅");
+
+        return new ResponseProfile(profile);
     }
 
     @Override
@@ -88,19 +102,21 @@ public class MemberServiceImpl implements MemberService {
         Member findMember = memberRepository.findByUsername(username);
         ResponseProfile.ProfileInfo profile = memberRepository.getMemberProfile(findMember);
         log.info("----------------------------------------------------------------");
-        log.info("조회한 사용자 정보로 Profile 생성");
+        log.info("Profile 생성");
 
         Member loginMember = memberRepository.findByEmail(userEmail);
         Following following = followingRepository.addFollowing(loginMember, username);
-        Followers followers = followersRepository.addFollowers(findMember, loginMember.getUsername());
+        Follower follower = followersRepository.addFollower(findMember, loginMember.getUsername());
         log.info("새로운 팔로우 정보 추가");
 
         followingRepository.save(following);
-        followersRepository.save(followers);
-        log.info("수정된 팔로우 정보 반영");
+        log.info("팔로우 정보 업데이트");
+
+        followersRepository.save(follower);
+        log.info("팔로워 정보 업데이트");
 
         profile.setFollowing("true");
-        log.info("팔로우 상태 수정");
+        log.info("응답용 ProfileInfo 의 팔로우 상태 수정");
 
         return new ResponseProfile(profile);
     }
@@ -110,19 +126,21 @@ public class MemberServiceImpl implements MemberService {
         Member findMember = memberRepository.findByUsername(username);
         ResponseProfile.ProfileInfo profile = memberRepository.getMemberProfile(findMember);
         log.info("----------------------------------------------------------------");
-        log.info("조회한 사용자 정보로 Profile 생성");
+        log.info("Profile 생성");
 
         Member loginMember = memberRepository.findByEmail(userEmail);
         Following following = followingRepository.findByFollowerIdAndUsername(loginMember, username);
-        Followers followers = followersRepository.findByMemberIdAndFollowerName(findMember, loginMember.getUsername());
+        Follower follower = followersRepository.findByMemberIdAndFollowerName(findMember, loginMember.getUsername());
         log.info("팔로우 정보 삭제");
 
         followingRepository.delete(following);
-        followersRepository.delete(followers);
-        log.info("수정된 팔로우 정보 반영");
+        log.info("팔로우 정보 업데이트");
+
+        followersRepository.delete(follower);
+        log.info("팔로워 정보 업데이트");
 
         profile.setFollowing("false");
-        log.info("팔로우 상태 수정");
+        log.info("응답용 ProfileInfo 의 팔로우 상태 수정");
 
         return new ResponseProfile(profile);
     }

@@ -17,6 +17,9 @@ public interface MemberService {
     // 사용자 프로필 조회
     ResponseProfile getProfile(String username, String userEmail);
 
+    // 사용자 프로필 조회 - 요청에 인증 정보 없을 때
+    ResponseProfile getProfileNotAuth(String username);
+
     // 사용자 팔로우 추가
     ResponseProfile addFollow(String username, String userEmail);
 

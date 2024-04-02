@@ -46,8 +46,12 @@ public class MemberController {
     public ResponseProfile getProfile(@PathVariable("username") String username,
                                       Authentication authentication) {
         log.info("GET 사용자 프로필 요청");
-        String userEmail = authentication.getName();
-        return memberService.getProfile(username, userEmail);
+        if (authentication == null) {
+            return memberService.getProfileNotAuth(username);
+        } else {
+            String userEmail = authentication.getName();
+            return memberService.getProfile(username, userEmail);
+        }
     }
 
     @ResponseStatus(HttpStatus.CREATED)

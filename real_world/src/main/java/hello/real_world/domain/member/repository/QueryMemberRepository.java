@@ -28,4 +28,7 @@ public interface QueryMemberRepository {
     // 사용자 정보 전달 : 조회한 사용자의 정보를 응답용 DTO 에 전달
     ResponseProfile.ProfileInfo getMemberProfile(Member findMember);
 
+    // 팔로우 정보 확인
+    String checkResult(Member loginMember, String username);
+
 }

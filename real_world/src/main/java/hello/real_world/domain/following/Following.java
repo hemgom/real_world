@@ -18,8 +18,8 @@ public class Following {
 
     private String username;    // 팔로우 대상 이름
 
-    @ManyToOne
-    @JoinColumn
-    private Member followerId;    // 팔로우 신청 id, Member PK 를 참조하는 FK
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "follower_id")
+    private Member follower;    // 팔로우 신청 id, Member PK 를 참조하는 FK
 
 }

@@ -1,12 +1,14 @@
 package hello.real_world.domain.member;
 
+import hello.real_world.domain.follower.Follower;
+import hello.real_world.domain.following.Following;
 import hello.real_world.domain.member.dto.RequestAddMember;
 import hello.real_world.domain.member.dto.RequestUpdateMember;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 // 사용자 정보
 @Getter
@@ -26,6 +28,12 @@ public class Member {
 
     private String bio;                 // 사용자 소개
     private String image;               // 사용자 프로필 사진
+
+    @OneToMany(mappedBy = "follower", fetch = FetchType.LAZY)
+    private List<Following> followings = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    private List<Follower> followers = new ArrayList<>();
 
     public static Member setMemberInfo(RequestAddMember.JoinInfo joinInfo) {
         return Member.builder()

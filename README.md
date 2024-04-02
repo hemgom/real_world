@@ -300,4 +300,15 @@ commit message : `edit GlobalExceptionHandler & setting IntelliJ`
 	- `ResponseEntityExceptionHandler`의 메서드를 오버라이딩해서 사용하지 않고 `@ExceptionHnadler`로 `MethodArgumentNotValidException` 예외를 처리
 	- 해당 코드가 다른 코드와 유사해 좀 더 일관성 있어보여 수정하게 됨
 - `DB 정보`를 `IntelliJ`로 불러오기 (연동)
-	- `IntelliJ`에서도 `DB 정보(= 속성 이름 등)`에 대해 알 수 있도록 해당 정보를 가져오는 작업 수행
+	- `IntelliJ`에서도 `DB 정보(= 속성 이름 등)`에 대해 알 수 있도록 해당 정보를 가져오는 작업 수행  
+<br/>
+
+### 24.04.02
+commit message : `change relationship & study JPA FetchType & edit gitignore`
+- 연관관계 수정
+	- `N:1 단방향` → `N:1 양방향`
+- `JPA FetchType` 추가
+	- `Proxy 및 FetchType` 학습 내용 `LearningToApply`에 추가
+- `gitignore` 수정
+	- `git`에는 직접 작성한 코드만 올릴 수 있도록 `Querydsl`이 작성해주는 `QClass` 제외하기로 함
+	- 패키지 또한 자동 생성해주기에 `generated` 패키지를 통으로 제외 시켜줌

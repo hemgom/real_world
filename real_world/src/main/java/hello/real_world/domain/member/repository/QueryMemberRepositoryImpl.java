@@ -1,6 +1,7 @@
 package hello.real_world.domain.member.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import hello.real_world.domain.following.Following;
 import hello.real_world.domain.member.Member;
 import hello.real_world.domain.member.dto.RequestUpdateMember;
 import hello.real_world.domain.member.dto.ResponseMember;
@@ -105,6 +106,21 @@ public class QueryMemberRepositoryImpl implements QueryMemberRepository {
                 .bio(findMember.getBio())
                 .image(findMember.getImage())
                 .build();
+    }
+
+    /**
+     * 조회 기능 메서드 : username 과 일치하는 follow 정보를 조회
+     * 조회 결과에 따라 지정 된 문자열을 반환
+     */
+    @Override
+    public String checkResult(Member loginMember, String username) {
+        log.info("loginMemberFollowingCount = {}", loginMember.getFollowings().size());
+        for (Following follow : loginMember.getFollowings()) {
+            if (!follow.getUsername().equals(username)) continue;
+
+            return "true";
+        }
+        return "false";
     }
 
 }
