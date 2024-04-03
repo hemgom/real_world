@@ -1,5 +1,6 @@
 package hello.real_world.domain.member;
 
+import hello.real_world.domain.article.Article;
 import hello.real_world.domain.follower.Follower;
 import hello.real_world.domain.following.Following;
 import hello.real_world.domain.member.dto.RequestAddMember;
@@ -34,6 +35,9 @@ public class Member {
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<Follower> followers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    private List<Article> articles = new ArrayList<>();
 
     public static Member setMemberInfo(RequestAddMember.JoinInfo joinInfo) {
         return Member.builder()

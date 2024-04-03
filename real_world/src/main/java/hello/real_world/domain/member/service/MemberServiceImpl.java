@@ -55,6 +55,13 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public ResponseMember getCurrentUser(String userEmail) {
+        Member loginMember = memberRepository.findByEmail(userEmail);
+        ResponseMember.UserInfo userInfo = memberRepository.getFindMemberInfo(loginMember);
+        return new ResponseMember(userInfo);
+    }
+
+    @Override
     public ResponseMember updateMember(RequestUpdateMember request, String jwt, String userEmail) {
         Member findMember = memberRepository.findByEmail(userEmail);
         Member updateMember = memberRepository.updateMemberInfo(request.getUser(), findMember);

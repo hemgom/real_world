@@ -31,6 +31,15 @@ public class MemberController {
         return memberService.userLogin(request);
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
+    @GetMapping("/user")
+    public ResponseMember getCurrentUser(@RequestHeader("Authorization") String jwt,
+                                         Authentication authentication) {
+        log.info("GET 현재 사용자 정보 조회");
+        String userEmail = authentication.getName();
+        return memberService.getCurrentUser(userEmail);
+    }
+
     @ResponseStatus(HttpStatus.RESET_CONTENT)
     @PutMapping("/user")
     public ResponseMember updateMember(@RequestBody RequestUpdateMember request,

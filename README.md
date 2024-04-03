@@ -311,4 +311,22 @@ commit message : `change relationship & study JPA FetchType & edit gitignore`
 	- `Proxy 및 FetchType` 학습 내용 `LearningToApply`에 추가
 - `gitignore` 수정
 	- `git`에는 직접 작성한 코드만 올릴 수 있도록 `Querydsl`이 작성해주는 `QClass` 제외하기로 함
-	- 패키지 또한 자동 생성해주기에 `generated` 패키지를 통으로 제외 시켜줌
+	- 패키지 또한 자동 생성해주기에 `generated` 패키지를 통으로 제외 시켜줌  
+<br/>
+
+### 24.04.03
+commit message : `add entity & edit DB ERD & add Specs.md`
+- 신규 Entity 추가
+	- `Article`: 기사의 제목, 내용, 작성일 등을 가지는 객체
+	- `Favorite`: 기사에 `좋아요`를 누른 유정의 정보를 가지는 객체
+	- `Tag`: 기사에 설정한 태그 정보를 가지는 객체
+	- `Comment`: 기사에 작성한 `댓글`에 대한 정보를 가지는 객체
+- 객체 연관관계
+	- 한 명의 `회원`은 `기사`를 작성하지 않거나, `1개` 또는 `여러개`의 `기사`를 작성 가능 `(회원 : 기사 = 1 : N)`
+	- 하나의 `기사`는 `좋아요`가 없거나, `1개` 또는 `여러개`를 받을 수 있음 `(기사 : 좋아요 = 1 : N)`
+	- 하나의 `기사`는 `태그`가 없거나, `1개` 또는 `여러개`를 설정 할 수 있음 `(기사 : 태그 = 1 : N)`
+	- 하나의 `기사`는 `댓글`이 없거나, `1개` 또는 `여러개`를 가질 수 있음 `(기사 : 댓글 = 1 : N)`
+- DB ERD 수정
+	- 신규 엔티티 추가에 따른 ERD 추가 작성
+- `Specs.md` 작성
+	- 요구 스펙 사항을 정리한 파일 작성

@@ -11,6 +11,9 @@ public interface MemberService {
     // 사용자 로그인
     ResponseMember userLogin(RequestLogin request);
 
+    // 현재 사용자 정보 조회
+    ResponseMember getCurrentUser(String userEmail);
+
     // 사용자 정보 수정
     ResponseMember updateMember(RequestUpdateMember request, String jwt, String userEmail);
 
