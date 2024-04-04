@@ -33,6 +33,7 @@ public class SecurityConfig {
                                 .requestMatchers("/user").hasAnyAuthority("USER")       // 사용자 정보 수정 (권한 필요)
                                 .requestMatchers("/profiles/{username}").permitAll()
                                 .requestMatchers("/profiles/{username}/follow").hasAnyAuthority("USER")
+                                .requestMatchers("/articles/{slug}").hasAnyAuthority("USER")
                                 .anyRequest().authenticated()                         // 그 밖의 요청에 대해서 인증이 필요
                 );
 

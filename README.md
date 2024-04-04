@@ -329,4 +329,12 @@ commit message : `add entity & edit DB ERD & add Specs.md`
 - DB ERD 수정
 	- 신규 엔티티 추가에 따른 ERD 추가 작성
 - `Specs.md` 작성
-	- 요구 스펙 사항을 정리한 파일 작성
+	- 요구 스펙 사항을 정리한 파일 작성  
+<br/>
+
+### 24.04.04
+commit message : `add funtion create article`
+- 신규 기능 추가
+	- `기사 생성`
+	- `기사 조회` : 인증이 필요한 부분은 아직 미완성, 즐겨찾기 기능 추가 후 작성 할 예정
+	- `기사 수정` : 기사 조회와 동일한 이유로 미완성

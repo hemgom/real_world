@@ -1,5 +1,5 @@
 # Endpoints Specs in RealWorld
-해당 프로젝트는 [RealWorld_Specs](https://realworld-docs.netlify.app/docs/specs/backend-specs/endpoints) 의 `Endpoints` 스펙을 추가 하였다.
+해당 프로젝트는 [RealWorld_Specs](https://realworld-docs.netlify.app/docs/specs/backend-specs/endpoints) 의 `Backend Specs` 스펙을 추가 하였다.
 ## Check Specs
 적용 할 스펙과 해당 스펙을 프로젝트에 추가 했는지 확인
 - [x] 인증 헤더
@@ -81,10 +81,10 @@
 - [ ] 기사 조회
   - `요청 타입`: `GET`
   - `요청 URL`: `/api/articles/:slug`
-  - `인증 헤더`: 불필요  
+  - `인증 헤더`: 선택 사항  
 <br/>
 
-- [ ] 기사 등록 (생성)
+- [x] 기사 등록 (생성)
   - `요청 타입`: `POST`
   - `요청 URL`: `/api/articles`
   - `인증 헤더`: 필요

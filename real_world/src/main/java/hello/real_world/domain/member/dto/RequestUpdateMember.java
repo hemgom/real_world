@@ -22,18 +22,6 @@ public class RequestUpdateMember {
         private String bio;
         private String image;
 
-        public static UpdateInfo setUpdateInfo(RequestUpdateMember request) {
-
-            return UpdateInfo.builder()
-                    .email(request.getUser().getEmail())
-                    .username(request.getUser().getUsername())
-                    .password(request.getUser().getPassword())
-                    .bio(request.getUser().getBio())
-                    .image(request.getUser().getImage())
-                    .build();
-
-        }
-
     }
 
 }

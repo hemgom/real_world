@@ -1,20 +1,24 @@
 package hello.real_world.domain.article;
 
+import hello.real_world.domain.article.dto.RequestAddArticle;
+import hello.real_world.domain.article.dto.RequestUpdateArticle;
 import hello.real_world.domain.comment.Comment;
 import hello.real_world.domain.favorite.Favorite;
 import hello.real_world.domain.member.Member;
+import hello.real_world.domain.member.dto.ResponseProfile;
 import hello.real_world.domain.tag.Tag;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Getter
 @Entity
 @Builder
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
-@NoArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Article {
 
     @Id
@@ -29,6 +33,7 @@ public class Article {
     private String createAt;            // 작성일
     private String updateAt;            // 수정일
 
+    @Builder.Default
     private Long favoriteCount = 0L;    // 좋아요 개수
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -43,5 +48,44 @@ public class Article {
 
     @OneToMany(mappedBy = "article", fetch = FetchType.LAZY)
     private List<Comment> comments = new ArrayList<>();
+
+    public static Article setArticleInfo(RequestAddArticle.CreateInfo createInfo, Member author) {
+
+        return Article.builder()
+                .slug(createInfo.getTitle().toLowerCase())
+                .title(createInfo.getTitle())
+                .description(createInfo.getDescription())
+                .body(createInfo.getBody())
+                .member(author)
+                .build();
+
+    }
+
+    public void setCreateAt() {
+        Date now = new Date();
+        this.createAt = String.valueOf(now);
+    }
+
+    public void setUpdateAt() {
+        Date now = new Date();
+        this.updateAt = String.valueOf(now);
+    }
+
+    public void updateArticle(RequestUpdateArticle.UpdateInfo updateInfo) {
+
+        if (updateInfo.getTitle() != null) {
+            this.title = updateInfo.getTitle();
+            this.slug = updateInfo.getTitle().toLowerCase();
+        }
+
+        if (updateInfo.getBody() != null) {
+            this.body = updateInfo.getBody();
+        }
+
+        if (updateInfo.getDescription() != null) {
+            this.description = updateInfo.getDescription();
+        }
+
+    }
 
 }
