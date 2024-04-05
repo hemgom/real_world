@@ -5,6 +5,7 @@ import hello.real_world.security.JwtUtilImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -28,13 +29,35 @@ public class SecurityConfig {
         httpSecurity
                 .authorizeHttpRequests(
                         authorize -> authorize
-                                .requestMatchers("/users").permitAll()                             // 사용자 등록 (권한 필요x)
-                                .requestMatchers("/users/login").permitAll()                       // 사용자 로그인 (권한 필요x)
-                                .requestMatchers("/user").hasAnyAuthority("USER")       // 사용자 정보 수정 (권한 필요)
-                                .requestMatchers("/profiles/{username}").permitAll()
-                                .requestMatchers("/profiles/{username}/follow").hasAnyAuthority("USER")
-                                .requestMatchers("/articles/{slug}").hasAnyAuthority("USER")
-                                .anyRequest().authenticated()                         // 그 밖의 요청에 대해서 인증이 필요
+                                // 사용자 등록
+                                .requestMatchers(HttpMethod.POST, "/users").permitAll()
+                                // 로그인
+                                .requestMatchers(HttpMethod.POST, "/users/login").permitAll()
+                                // 현재 로그인한 사용자 정보 조회
+                                .requestMatchers(HttpMethod.GET, "/user").hasAnyAuthority("USER")
+                                // 사용자 정보 수정
+                                .requestMatchers(HttpMethod.PUT, "/user").hasAnyAuthority("USER")
+                                // 사용자 프로필 조회
+                                .requestMatchers(HttpMethod.GET, "/profiles/{username}").permitAll()
+                                // 팔로우 추가
+                                .requestMatchers(HttpMethod.POST, "/profiles/{username}/follow").hasAnyAuthority("USER")
+                                // 팔로우 삭제
+                                .requestMatchers(HttpMethod.DELETE, "/profiles/{username}/follow").hasAnyAuthority("USER")
+                                // 기사 등록
+                                .requestMatchers(HttpMethod.POST, "/articles").hasAnyAuthority("USER")
+                                // 기사 조회
+                                .requestMatchers(HttpMethod.GET, "/articles/{slug}").permitAll()
+                                // 기사 수정
+                                .requestMatchers(HttpMethod.PUT, "/articles/{slug}").hasAnyAuthority("USER")
+                                // 기사 삭제
+                                .requestMatchers(HttpMethod.DELETE, "/articles/{slug}").hasAnyAuthority("USER")
+                                // 즐겨찾기 추가
+                                .requestMatchers(HttpMethod.POST, "/articles/{slug}/favorite").hasAnyAuthority("USER")
+                                // 즐겨찾기 삭제
+                                .requestMatchers(HttpMethod.DELETE, "/articles/{slug}/favorite").hasAnyAuthority("USER")
+                                // 태그 조회
+                                .requestMatchers(HttpMethod.GET, "/tags").permitAll()
+                                .anyRequest().authenticated()   // 위에 설정한 요청 외에는 인증이 필요
                 );
 
         // JWT 인증을 위해 구현한 JwtAuthenticationFilter 를 UsernamePasswordAuthenticationFilter 전에 수행하도록 설정

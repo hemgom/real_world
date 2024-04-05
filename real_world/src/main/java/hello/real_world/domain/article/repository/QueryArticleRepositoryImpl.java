@@ -30,11 +30,12 @@ public class QueryArticleRepositoryImpl implements QueryArticleRepository {
     }
 
     @Override
-    public ResponseSingleArticle.ArticleInfo getArticleInfoNotAuth(Article article) {
+    public ResponseSingleArticle.ArticleInfo getArticleInfo(Article article) {
         return ResponseSingleArticle.ArticleInfo.builder()
                 .slug(article.getSlug())
                 .title(article.getTitle())
                 .description(article.getDescription())
+                .body(article.getBody())
                 .tagList(article.getTagList().stream().map(Tag::getTag).toList())
                 .createAt(article.getCreateAt())
                 .updateAt(article.getUpdateAt())

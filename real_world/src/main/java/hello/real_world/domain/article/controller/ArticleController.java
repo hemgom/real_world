@@ -1,9 +1,10 @@
 package hello.real_world.domain.article.controller;
 
 import hello.real_world.domain.article.dto.RequestAddArticle;
+import hello.real_world.domain.article.dto.RequestUpdateArticle;
 import hello.real_world.domain.article.dto.ResponseSingleArticle;
 import hello.real_world.domain.article.service.ArticleService;
-import hello.real_world.domain.member.service.MemberService;
+import hello.real_world.domain.tag.dto.ResponseTags;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -39,33 +40,46 @@ public class ArticleController {
         }
     }
 
-    @ResponseStatus(HttpStatus.RESET_CONTENT)
+    @ResponseStatus(HttpStatus.CREATED)
     @PutMapping("/articles/{slug}")
-    public ResponseSingleArticle updateArticle(@RequestBody String s,
+    public ResponseSingleArticle updateArticle(@RequestBody RequestUpdateArticle request,
                                                @PathVariable("slug") String slug,
                                                Authentication authentication) {
-
-        return null;
+        log.info("PUT 기사 수정");
+        String userEmail = authentication.getName();
+        return articleService.updateArticle(request, slug, userEmail);
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.RESET_CONTENT)
     @DeleteMapping("/articles/{slug}")
-    public void delArticle(@PathVariable("slug") String slug, Authentication authentication) {
-
+    public void delArticle(@PathVariable("slug") String slug) {
+        log.info("DELETE 기사 삭제");
+        articleService.delArticle(slug);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/articles/{slug}/favorite")
     public ResponseSingleArticle addFavoriteArticle(@PathVariable("slug") String slug,
                                                     Authentication authentication) {
-        return null;
+        log.info("POST 즐겨찾기 추가");
+        String userEmail = authentication.getName();
+        return articleService.addFavoriteArticle(slug, userEmail);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @DeleteMapping("/articles/{slug}/favorite")
     public ResponseSingleArticle delFavoriteArticle(@PathVariable("slug") String slug,
                                                     Authentication authentication) {
-        return null;
+        log.info("DELETE 즐겨찾기 삭제");
+        String userEmail = authentication.getName();
+        return articleService.delFavoriteArticle(slug, userEmail);
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @GetMapping("/tags")
+    public ResponseTags getTags() {
+        log.info("태그 리스트 반환");
+        return articleService.getAllTags();
     }
 
 }

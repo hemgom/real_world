@@ -10,7 +10,7 @@ public interface QueryArticleRepository {
     Article findBySlug(String slug);
 
     // (인증 없이) 기사 정보 가져오기
-    ResponseSingleArticle.ArticleInfo getArticleInfoNotAuth(Article article);
+    ResponseSingleArticle.ArticleInfo getArticleInfo(Article article);
 
     // 기사 수정 (업데이트)
     Article updateArticle(RequestUpdateArticle.UpdateInfo updateInfo, Article findArticle);

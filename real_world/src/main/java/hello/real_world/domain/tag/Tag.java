@@ -1,11 +1,8 @@
 package hello.real_world.domain.tag;
 
 import hello.real_world.domain.article.Article;
-import hello.real_world.domain.article.dto.RequestAddArticle;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.List;
 
 @Getter
 @Entity

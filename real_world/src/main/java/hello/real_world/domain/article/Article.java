@@ -5,7 +5,6 @@ import hello.real_world.domain.article.dto.RequestUpdateArticle;
 import hello.real_world.domain.comment.Comment;
 import hello.real_world.domain.favorite.Favorite;
 import hello.real_world.domain.member.Member;
-import hello.real_world.domain.member.dto.ResponseProfile;
 import hello.real_world.domain.tag.Tag;
 import jakarta.persistence.*;
 import lombok.*;
@@ -86,6 +85,10 @@ public class Article {
             this.description = updateInfo.getDescription();
         }
 
+    }
+
+    public void favoriteCountIncrease() {
+        this.favoriteCount += 1;
     }
 
 }
