@@ -3,6 +3,9 @@ package hello.real_world.domain.article.service;
 import hello.real_world.domain.article.dto.RequestAddArticle;
 import hello.real_world.domain.article.dto.RequestUpdateArticle;
 import hello.real_world.domain.article.dto.ResponseSingleArticle;
+import hello.real_world.domain.comment.dto.RequestAddComment;
+import hello.real_world.domain.comment.dto.ResponseMultipleComments;
+import hello.real_world.domain.comment.dto.ResponseSingleComment;
 import hello.real_world.domain.tag.dto.ResponseTags;
 
 public interface ArticleService {
@@ -30,5 +33,17 @@ public interface ArticleService {
 
     // 모든 태그 반환 (리스트)
     ResponseTags getAllTags();
+
+    // 기사 댓글 추가
+    ResponseSingleComment addComment(RequestAddComment request, String slug, String userEmail);
+
+    // 기사 댓글 제거
+    void delComment(String slug, Long commentId, String userEmail);
+
+    // 기사의 모든 댓글 조회 (인증X)
+    ResponseMultipleComments getAllCommentsFromArticleNotAuth(String slug);
+
+    // 기사의 모든 댓글 조회 (인증O)
+    ResponseMultipleComments getAllCommentsFromArticle(String slug, String userEmail);
 
 }

@@ -351,4 +351,12 @@ commit message : `add new funtion for article, favorite, tag & edit SecurityConf
 - 시큐리티 설정 수정
 	- 기존에는 특정 URL 에 대한 권한 설정을 해두었음
 	- 추가적으로 `HTTP Method`에 대한 지정을 추가함
-		- 동일한 URL 을 가지더라고 사용된 `HTTP Method`에 따라 다른 권한 설정이 가능해짐
+		- 동일한 URL 을 가지더라고 사용된 `HTTP Method`에 따라 다른 권한 설정이 가능해짐  
+<br/>
+
+### 24.04.05
+commit message : `add new funtion commentt`
+- 신규 기능 추가
+	- `기사 댓글 등록`: 기사에 댓글 작성
+	- `기사 댓글 삭제`: 기사에 작성된 댓글 삭제
+	- `기사 댓글 조회`: 기사에 작성된 댓글 조회

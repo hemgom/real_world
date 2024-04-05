@@ -106,23 +106,23 @@
   - `인증 필요 여부`: Yes    
 <br/>
 
-- [ ] 기사에 댓글 작성
+- [x] 기사에 댓글 작성
   - `요청 타입`: `POST`
   - `요청 URL`: `/api/articles/:slug/comments`
   - `인증 필요 여부`: Yes
   - `필수 필드`: `body`  
 <br/>
 
-- [ ] 기사에서 댓글 가져오기
+- [x] 기사의 모든 댓글 조회
   - `요청 타입`: `GET`
   - `요청 URL`: `/api/articles/:slug/comments`
-  - `인증 필요 여부`: Options    
+  - `인증 필요 여부`: Options  
 <br/>
 
-- [ ] 댓글 삭제
+- [x] 기사 댓글 삭제
   - `요청 타입`: `DELETE`
   - `요청 URL`: `/api/articles/:slug/comments/:id`
-  - `인증 필요 여부`: Yes    
+  - `인증 필요 여부`: Yes  
 <br/>
 
 - [x] 기사 즐겨찾기 등록

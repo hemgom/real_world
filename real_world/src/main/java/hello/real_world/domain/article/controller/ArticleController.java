@@ -4,6 +4,9 @@ import hello.real_world.domain.article.dto.RequestAddArticle;
 import hello.real_world.domain.article.dto.RequestUpdateArticle;
 import hello.real_world.domain.article.dto.ResponseSingleArticle;
 import hello.real_world.domain.article.service.ArticleService;
+import hello.real_world.domain.comment.dto.RequestAddComment;
+import hello.real_world.domain.comment.dto.ResponseMultipleComments;
+import hello.real_world.domain.comment.dto.ResponseSingleComment;
 import hello.real_world.domain.tag.dto.ResponseTags;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -78,8 +81,41 @@ public class ArticleController {
     @ResponseStatus(HttpStatus.CREATED)
     @GetMapping("/tags")
     public ResponseTags getTags() {
-        log.info("태그 리스트 반환");
+        log.info("GET 태그 리스트 반환");
         return articleService.getAllTags();
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/articles/{slug}/comments")
+    public ResponseSingleComment addComment(@RequestBody RequestAddComment request,
+                                            @PathVariable("slug") String slug,
+                                            Authentication authentication) {
+        log.info("POST 게시글 댓글 추가");
+        String userEmail = authentication.getName();
+        return articleService.addComment(request, slug, userEmail);
+    }
+
+    @ResponseStatus(HttpStatus.RESET_CONTENT)
+    @DeleteMapping("/articles/{slug}/comments/{id}")
+    public void delComment(@PathVariable("slug") String slug,
+                           @PathVariable("id") Long commentId,
+                           Authentication authentication) {
+        log.info("DELETE 게시글 댓글 삭제");
+        String userEmail = authentication.getName();
+        articleService.delComment(slug, commentId, userEmail);
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @GetMapping("/articles/{slug}/comments")
+    public ResponseMultipleComments getAllCommentsFromArticle(@PathVariable("slug") String slug,
+                                                              Authentication authentication) {
+        log.info("GET 게시글의 모든 댓글 조회");
+        if (authentication == null) {
+            return articleService.getAllCommentsFromArticleNotAuth(slug);
+        } else {
+            String userEmail = authentication.getName();
+            return articleService.getAllCommentsFromArticle(slug, userEmail);
+        }
     }
 
 }

@@ -57,6 +57,12 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.DELETE, "/articles/{slug}/favorite").hasAnyAuthority("USER")
                                 // 태그 조회
                                 .requestMatchers(HttpMethod.GET, "/tags").permitAll()
+                                // 댓글 추가
+                                .requestMatchers(HttpMethod.POST, "/articles/{slug}/comments").hasAnyAuthority("USER")
+                                // 댓글 삭제
+                                .requestMatchers(HttpMethod.DELETE, "/articles/{slug}/comments/{id}").hasAnyAuthority("USER")
+                                // 기사에 달린 모든 댓글 조회
+                                .requestMatchers(HttpMethod.GET, "/articles/{slug}/comments").permitAll()
                                 .anyRequest().authenticated()   // 위에 설정한 요청 외에는 인증이 필요
                 );
 

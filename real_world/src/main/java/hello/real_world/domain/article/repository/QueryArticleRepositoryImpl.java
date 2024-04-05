@@ -3,11 +3,13 @@ package hello.real_world.domain.article.repository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hello.real_world.domain.article.Article;
 import hello.real_world.domain.article.dto.RequestUpdateArticle;
+import hello.real_world.domain.article.dto.ResponseMultipleArticles;
 import hello.real_world.domain.article.dto.ResponseSingleArticle;
 import hello.real_world.domain.tag.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
