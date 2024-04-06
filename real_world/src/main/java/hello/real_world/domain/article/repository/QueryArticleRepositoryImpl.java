@@ -1,19 +1,23 @@
 package hello.real_world.domain.article.repository;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hello.real_world.domain.article.Article;
-import hello.real_world.domain.article.dto.RequestUpdateArticle;
-import hello.real_world.domain.article.dto.ResponseMultipleArticles;
+import hello.real_world.domain.article.dto.RequestFindArticles;
 import hello.real_world.domain.article.dto.ResponseSingleArticle;
 import hello.real_world.domain.tag.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
-import java.util.Date;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static hello.real_world.domain.article.QArticle.article;
+import static hello.real_world.domain.favorite.QFavorite.favorite;
+import static hello.real_world.domain.member.QMember.member;
+import static hello.real_world.domain.tag.QTag.tag1;
 
 @Repository
 @RequiredArgsConstructor
@@ -46,9 +50,35 @@ public class QueryArticleRepositoryImpl implements QueryArticleRepository {
     }
 
     @Override
-    public Article updateArticle(RequestUpdateArticle.UpdateInfo updateInfo, Article findArticle) {
-        findArticle.updateArticle(updateInfo);
-        return findArticle;
+    public List<Article> findRecentArticles(RequestFindArticles request) {
+        return Optional.of(query
+                        .selectFrom(article)
+                        .join(article.member, member)
+                        .leftJoin(article.tagList, tag1)
+                        .leftJoin(article.favorites, favorite) // outer join ?
+                        .where(
+                                tagNameEq(request.getTagName()),
+                                authorNameEq(request.getAuthorName()),
+                                favoriteUsernameEq(request.getFavoriteUsername())
+                        )
+                        .orderBy(article.createAt.desc())
+                        .limit(request.getLimitCount())
+                        .offset(request.getOffsetCount())
+                        .distinct()
+                        .fetch())
+                .orElseThrow(() -> new NoSuchElementException("조건에 맞는 기사가 없습니다."));
+    }
+
+    public BooleanExpression tagNameEq(String tagName) {
+        return StringUtils.hasText(tagName) ? tag1.tag.eq(tagName) : null;
+    }
+
+    public BooleanExpression authorNameEq(String authorName) {
+        return StringUtils.hasText(authorName) ? member.username.eq(authorName) : null;
+    }
+
+    public BooleanExpression favoriteUsernameEq(String favoriteUsername) {
+        return StringUtils.hasText(favoriteUsername) ? favorite.username.eq(favoriteUsername) : null;
     }
 
 }

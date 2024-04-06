@@ -63,7 +63,9 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.DELETE, "/articles/{slug}/comments/{id}").hasAnyAuthority("USER")
                                 // 기사에 달린 모든 댓글 조회
                                 .requestMatchers(HttpMethod.GET, "/articles/{slug}/comments").permitAll()
-                                .anyRequest().authenticated()   // 위에 설정한 요청 외에는 인증이 필요
+                                // 최근 기사 목록 조회
+                                .requestMatchers(HttpMethod.GET, "/articles").permitAll()
+                                .anyRequest().permitAll()   // 위에 설정한 요청 외에는 인증 필요 없음
                 );
 
         // JWT 인증을 위해 구현한 JwtAuthenticationFilter 를 UsernamePasswordAuthenticationFilter 전에 수행하도록 설정

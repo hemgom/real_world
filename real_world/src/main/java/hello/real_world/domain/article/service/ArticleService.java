@@ -1,8 +1,6 @@
 package hello.real_world.domain.article.service;
 
-import hello.real_world.domain.article.dto.RequestAddArticle;
-import hello.real_world.domain.article.dto.RequestUpdateArticle;
-import hello.real_world.domain.article.dto.ResponseSingleArticle;
+import hello.real_world.domain.article.dto.*;
 import hello.real_world.domain.comment.dto.RequestAddComment;
 import hello.real_world.domain.comment.dto.ResponseMultipleComments;
 import hello.real_world.domain.comment.dto.ResponseSingleComment;
@@ -45,5 +43,11 @@ public interface ArticleService {
 
     // 기사의 모든 댓글 조회 (인증O)
     ResponseMultipleComments getAllCommentsFromArticle(String slug, String userEmail);
+
+    // 최근 기사 목록 조회 (인증X)
+    ResponseMultipleArticles findRecentArticlesNotAuth(RequestFindArticles request);
+
+    // 최근 기사 목록 조회 (인증O)
+    ResponseMultipleArticles findRecentArticles(RequestFindArticles request, String userEmail);
 
 }

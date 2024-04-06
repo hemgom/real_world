@@ -9,4 +9,11 @@ public class ResponseMultipleArticles {
 
     private List<ResponseSingleArticle.ArticleInfo> articles;
 
+    public ResponseMultipleArticles() {
+    }
+
+    public ResponseMultipleArticles(List<ResponseSingleArticle.ArticleInfo> articles) {
+        this.articles = articles;
+    }
+
 }

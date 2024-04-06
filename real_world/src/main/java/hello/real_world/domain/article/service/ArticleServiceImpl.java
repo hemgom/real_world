@@ -1,9 +1,7 @@
 package hello.real_world.domain.article.service;
 
 import hello.real_world.domain.article.Article;
-import hello.real_world.domain.article.dto.RequestAddArticle;
-import hello.real_world.domain.article.dto.RequestUpdateArticle;
-import hello.real_world.domain.article.dto.ResponseSingleArticle;
+import hello.real_world.domain.article.dto.*;
 import hello.real_world.domain.article.repository.ArticleRepository;
 import hello.real_world.domain.comment.Comment;
 import hello.real_world.domain.comment.dto.RequestAddComment;
@@ -21,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -299,6 +298,50 @@ public class ArticleServiceImpl implements ArticleService {
         log.info("해당 게시물의 모든 댓글 작성자 프로필 적용");
 
         return new ResponseMultipleComments(commentsInfo);
+    }
+
+    @Override
+    public ResponseMultipleArticles findRecentArticlesNotAuth(RequestFindArticles request) {
+        List<Article> articles = articleRepository.findRecentArticles(request);
+        log.info("----------------------------------------------------------------");
+        log.info("요청 파라미터에 따른 기사 조회");
+
+        List<ResponseSingleArticle.ArticleInfo> articlesInfo = new ArrayList<>();
+        for (Article article : articles) {
+            // 조회한 기사 정보로 응답 객체 생성 및 기사 작성자 프로필 반영
+            ResponseSingleArticle.ArticleInfo articleInfo = articleRepository.getArticleInfo(article);
+            Member articleAuthor = article.getMember();
+            articleInfo.setAuthor(memberRepository.getMemberProfile(articleAuthor));
+            articleInfo.getAuthor().setFollowing("false");
+
+            // 작성 완료된 응답 객체 저장
+            articlesInfo.add(articleInfo);
+        }
+
+        return new ResponseMultipleArticles(articlesInfo);
+    }
+
+    @Override
+    public ResponseMultipleArticles findRecentArticles(RequestFindArticles request, String userEmail) {
+        List<Article> articles = articleRepository.findRecentArticles(request);
+        Member loginMember = memberRepository.findByEmail(userEmail);
+        log.info("----------------------------------------------------------------");
+        log.info("요청 파라미터에 따른 기사 조회 및 로그인 사용자 조회");
+
+        List<ResponseSingleArticle.ArticleInfo> articlesInfo = new ArrayList<>();
+        for (Article article : articles) {
+            // 조회한 기사 정보로 응답 객체 생성 및 기사 작성자 프로필 반영
+            ResponseSingleArticle.ArticleInfo articleInfo = articleRepository.getArticleInfo(article);
+            Member articleAuthor = article.getMember();
+            articleInfo.setAuthor(memberRepository.getMemberProfile(articleAuthor));
+            articleInfo.getAuthor().setFollowing(memberRepository.checkResult(loginMember, articleAuthor.getUsername()));
+
+            // 작성 완료된 응답 객체 저장
+            articlesInfo.add(articleInfo);
+        }
+        log.info("응답 객체 리스트 작성 완료");
+
+        return new ResponseMultipleArticles(articlesInfo);
     }
 
 }

@@ -1,8 +1,6 @@
 package hello.real_world.domain.article.controller;
 
-import hello.real_world.domain.article.dto.RequestAddArticle;
-import hello.real_world.domain.article.dto.RequestUpdateArticle;
-import hello.real_world.domain.article.dto.ResponseSingleArticle;
+import hello.real_world.domain.article.dto.*;
 import hello.real_world.domain.article.service.ArticleService;
 import hello.real_world.domain.comment.dto.RequestAddComment;
 import hello.real_world.domain.comment.dto.ResponseMultipleComments;
@@ -115,6 +113,24 @@ public class ArticleController {
         } else {
             String userEmail = authentication.getName();
             return articleService.getAllCommentsFromArticle(slug, userEmail);
+        }
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @GetMapping("/articles")
+    public ResponseMultipleArticles findRecentArticles(@RequestParam(name = "tag", required = false) String tagName,
+                                                       @RequestParam(name = "author", required = false) String authorName,
+                                                       @RequestParam(name = "favorite", required = false) String favoriteUsername,
+                                                       @RequestParam(name = "limit", defaultValue = "20") Long limitCount,
+                                                       @RequestParam(name = "offset", defaultValue = "0") Long offsetCount,
+                                                       Authentication authentication) {
+        RequestFindArticles request = new RequestFindArticles(tagName, authorName, favoriteUsername, limitCount, offsetCount);
+        log.info("GET 검색 조건에 맞는 기사들 조회");
+        if (authentication == null) {
+            return articleService.findRecentArticlesNotAuth(request);
+        } else {
+            String userEmail = authentication.getName();
+            return articleService.findRecentArticles(request, userEmail);
         }
     }
 
