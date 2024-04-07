@@ -18,4 +18,7 @@ public interface QueryArticleRepository {
     // 최근 기사 목록 가져오기
     List<Article> findRecentArticles(RequestFindArticles request);
 
+    // 최근 피드 기사 가져오기
+    List<Article> findFeedArticles(List<String> followingUsers, Long limitCount, Long offsetCount);
+
 }

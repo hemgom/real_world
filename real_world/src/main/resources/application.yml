@@ -25,6 +25,6 @@ jwt:
   accessToken_valid_time: 86400000      # 1일
   refreshToken_valid_time: 2592000000   # 30일
 
-logging:
-  level:
-    org.hibernate: DEBUG
+#logging:
+  #level:
+    #org.hibernate: DEBUG

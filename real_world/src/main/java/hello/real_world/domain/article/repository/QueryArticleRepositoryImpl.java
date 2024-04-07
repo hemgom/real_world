@@ -5,6 +5,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import hello.real_world.domain.article.Article;
 import hello.real_world.domain.article.dto.RequestFindArticles;
 import hello.real_world.domain.article.dto.ResponseSingleArticle;
+import hello.real_world.domain.following.QFollowing;
+import hello.real_world.domain.member.Member;
+import hello.real_world.domain.member.QMember;
 import hello.real_world.domain.tag.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -16,6 +19,7 @@ import java.util.Optional;
 
 import static hello.real_world.domain.article.QArticle.article;
 import static hello.real_world.domain.favorite.QFavorite.favorite;
+import static hello.real_world.domain.following.QFollowing.*;
 import static hello.real_world.domain.member.QMember.member;
 import static hello.real_world.domain.tag.QTag.tag1;
 
@@ -79,6 +83,22 @@ public class QueryArticleRepositoryImpl implements QueryArticleRepository {
 
     public BooleanExpression favoriteUsernameEq(String favoriteUsername) {
         return StringUtils.hasText(favoriteUsername) ? favorite.username.eq(favoriteUsername) : null;
+    }
+
+    @Override
+    public List<Article> findFeedArticles(List<String> followingUsers, Long limitCount, Long offsetCount) {
+        return Optional.of(query
+                        .selectFrom(article)
+                        .leftJoin(article.member, member)
+                        .where(
+                                article.member.username.in(followingUsers)
+                        )
+                        .orderBy(article.createAt.desc())
+                        .limit(limitCount)
+                        .offset(offsetCount)
+                        .distinct()
+                        .fetch())
+                .orElseThrow(() -> new NoSuchElementException("팔로우한 사용자가 없어 피드를 가져 올 수 없습니다."));
     }
 
 }

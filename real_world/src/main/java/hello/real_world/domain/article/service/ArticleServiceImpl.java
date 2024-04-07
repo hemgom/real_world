@@ -10,14 +10,18 @@ import hello.real_world.domain.comment.dto.ResponseSingleComment;
 import hello.real_world.domain.comment.repository.CommentRepository;
 import hello.real_world.domain.favorite.Favorite;
 import hello.real_world.domain.favorite.repository.FavoriteRepository;
+import hello.real_world.domain.following.repository.FollowingRepository;
 import hello.real_world.domain.member.Member;
 import hello.real_world.domain.member.repository.MemberRepository;
 import hello.real_world.domain.tag.Tag;
 import hello.real_world.domain.tag.dto.ResponseTags;
 import hello.real_world.domain.tag.repository.TagRepository;
+import jakarta.persistence.LockModeType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +29,12 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ArticleServiceImpl implements ArticleService {
 
     private final ArticleRepository articleRepository;
     private final MemberRepository memberRepository;        // 사용자 정보 조회, 프로필 생성
+    private final FollowingRepository followingRepository;  // 로그인 사용자의 팔로우 목록 조회
     private final TagRepository tagRepository;              // 태그 저장, 조회
     private final FavoriteRepository favoriteRepository;    // 즐겨찾기 저장, 삭제, 조회
     private final CommentRepository commentRepository;      // 댓글 저장, 삭제, 조회
@@ -158,6 +164,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    @Lock(LockModeType.PESSIMISTIC_FORCE_INCREMENT)
     public ResponseSingleArticle addFavoriteArticle(String slug, String userEmail) {
         Member loginMember = memberRepository.findByEmail(userEmail);
         log.info("----------------------------------------------------------------");
@@ -340,6 +347,30 @@ public class ArticleServiceImpl implements ArticleService {
             articlesInfo.add(articleInfo);
         }
         log.info("응답 객체 리스트 작성 완료");
+
+        return new ResponseMultipleArticles(articlesInfo);
+    }
+
+    @Override
+    public ResponseMultipleArticles makeFeedArticles(RequestFindArticles request, String userEmail) {
+        Member loginMember = memberRepository.findByEmail(userEmail);
+        List<String> followingUsernames = followingRepository.followingUsernameListFindByMember(loginMember);
+        List<Article> articles = articleRepository.findFeedArticles(followingUsernames, request.getLimitCount(), request.getOffsetCount());
+        log.info("----------------------------------------------------------------");
+        log.info("로그인 사용자의 팔로우 유저들의 작성 기사들 조회");
+
+        List<ResponseSingleArticle.ArticleInfo> articlesInfo = new ArrayList<>();
+        for (Article article : articles) {
+            // 조회한 기사 정버로 응답 객체 생성 및 기사 작성자 프로필 반영
+            ResponseSingleArticle.ArticleInfo articleInfo = articleRepository.getArticleInfo(article);
+            Member articleAuthor = article.getMember();
+            articleInfo.setAuthor(memberRepository.getMemberProfile(articleAuthor));
+            articleInfo.getAuthor().setFollowing("true");
+
+            // 작성 완료한 응답 객체 추가
+            articlesInfo.add(articleInfo);
+        }
+        log.info("응답 객체 작성 완료");
 
         return new ResponseMultipleArticles(articlesInfo);
     }

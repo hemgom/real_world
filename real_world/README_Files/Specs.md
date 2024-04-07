@@ -67,7 +67,7 @@
     - `?offset=number`: `number`만큼의 기사를 건너뛰고(스킵) 리스트 생성 `(기본 값 = 0)`  
 <br/>
 
-- [ ] 피드 기사
+- [x] 피드 기사
   - `요청 타입`: `GET`
   - `요청 URL`: `/api/articles/feed`
   - `인증 필요 여부`: Options

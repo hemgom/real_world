@@ -65,6 +65,8 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/articles/{slug}/comments").permitAll()
                                 // 최근 기사 목록 조회
                                 .requestMatchers(HttpMethod.GET, "/articles").permitAll()
+                                // 팔로우 한 사용자가 작성한 최근 기사 목록 조회
+                                .requestMatchers(HttpMethod.GET, "/articles/feed").permitAll()
                                 .anyRequest().permitAll()   // 위에 설정한 요청 외에는 인증 필요 없음
                 );
 

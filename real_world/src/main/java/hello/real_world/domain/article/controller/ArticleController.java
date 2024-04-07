@@ -134,4 +134,19 @@ public class ArticleController {
         }
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
+    @GetMapping("/articles/feed")
+    public ResponseMultipleArticles makeFeedArticles(@RequestParam(name = "limit", defaultValue = "20") Long limitCount,
+                                                     @RequestParam(name = "offset", defaultValue = "0") Long offsetCount,
+                                                     Authentication authentication) {
+        RequestFindArticles request = new RequestFindArticles(limitCount, offsetCount);
+        log.info("GET 검색 조건에 맞는, 팔로우한 사용자가 작성한 기사 조회");
+        if (authentication == null) {
+            return articleService.findRecentArticlesNotAuth(request);
+        } else {
+            String userEmail = authentication.getName();
+            return articleService.makeFeedArticles(request, userEmail);
+        }
+    }
+
 }

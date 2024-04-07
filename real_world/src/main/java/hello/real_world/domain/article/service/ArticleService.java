@@ -50,4 +50,7 @@ public interface ArticleService {
     // 최근 기사 목록 조회 (인증O)
     ResponseMultipleArticles findRecentArticles(RequestFindArticles request, String userEmail);
 
+    // 피드 기사 조회 (인증O)
+    ResponseMultipleArticles makeFeedArticles(RequestFindArticles request, String userEmail);
+
 }
